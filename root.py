@@ -3,8 +3,9 @@ from mainmenu import MainMenu
 
 root = Tk()
 root.title('FightMatch')
+# root.geometry("1600x900")
 root.attributes('-fullscreen', True)
-# root.iconbitmap()
+root.iconbitmap(r'./Images/icon.ico')
 root.update()
 width = root.winfo_width()
 height = root.winfo_height()
