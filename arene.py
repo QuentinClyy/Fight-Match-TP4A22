@@ -1,39 +1,32 @@
-"""
-La classe Arène
-
-Représente la zone où les dés sont lancés
-"""
-
-import colorama
+from tkinter import *
+from index import resize_image
 from de import De
 
 
+class GameTextureLoader:
+
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.arene_bg = resize_image("arena.png", self.width, self.height)
+
+
 class Arene:
-    """ Représente la zone de jeu où les dés sont lancés.
 
-    Attributes:
-        dimension (int): La dimension, largeur comme hauteur, de l'Arene.
-        des (dict): Les dés présents sur l'arène, sous la forme de paires <emplacement, dé>
-                    où emplacement est un tuple de coordonnées (x,y) et dé est une istance de la classe Dé.
-        mode_affichage (int): Le mode d'affichage (1 pour [X,2,3,4,5,6] ou 2 pour [X,⚁,⚂,⚃,⚄,⚅])
-    """
-
-    def __init__(self, dimension, de_initial, mode_affichage):
-        """
-        Constructeur de la classe Arene.
-        Le dé initial est centré et sa valeur ne doit pas être X.
-
-        Args:
-            dimension (int): La dimension, largeur comme hauteur, de l'Arene.
-            de_initial (De): L'unique dé présent dans l'arène au départ
-            mode_affichage (int): Le mode d'affichage (1 pour [X,2,3,4,5,6] ou 2 pour [X,⚁,⚂,⚃,⚄,⚅])
-        """
+    def __init__(self, master, dimension, de_initial, width, height):
+        self.master = master
+        self.width = width
+        self.height = height
         self.dimension = dimension
+        self.textures = GameTextureLoader(self.width, self.height)
+        self.arene_canvas = Canvas(self.master, width=self.width, height=self.height)
+
+        self.arene_tile = resize_image("tile.png", self.width//32, self.height//18)
+
         de_initial.lancer()
         while de_initial.valeur == 1:
             de_initial.lancer()
         self.des = {(self.dimension // 2, self.dimension // 2): de_initial}
-        self.mode_affichage = mode_affichage
 
     def dans_arene(self, emplacement):
         """
@@ -243,79 +236,19 @@ class Arene:
         joueur.rendre_de(self.des[emplacement])
         self.retirer_de(emplacement)
 
-    def afficher_de(self, emplacement):
-        """
-        Donne la représentation en chaîne de caractères du dé situé à l'emplacement
-        spécifié en paramètre, selon le mode d'affichage.
+    def afficher_de(self):
+       pass
 
-        Args:
-            emplacement ((int, int)): L'emplacement du dé à afficher
-
-        Returns:
-            str: La chaîne représentant le dé
-        """
-        return self.des[emplacement].affichage_string(self.mode_affichage)
-
-    def affichage_string(self, lancer=None):
-        """
-        Donne la représentation en chaîne de caractères de l'arène, en affichant la
-        trajectoire d'un lancer au besoin
-
-        Args:
-            lancer (optionel): Une liste correspondand à une trajectoire
-
-        Returns:
-            str: la représentation en chaîne de caractères
-        """
-        if lancer is None:
-            trajectoire = []
-        elif type(lancer) is list:
-            trajectoire = lancer
-        else:
-            trajectoire = lancer.trajectoire
-
-        ligne_exterieure = '{:s}  |'
-        for x in list(range(self.dimension)):
-            ligne_exterieure += '{:^3d}'.format(x)
-        ligne_exterieure += "|  {:s}\n"
-
-        ligne_interieure = "----" + "|" + "-" * 3 * self.dimension + "|----\n"
-
-        m = "\n"
-        m += ligne_exterieure.format('NO', 'NE')
-        m += ligne_interieure
-        for i in range(self.dimension):
-            m += "{:>3d} |".format(i)
-            for j in range(self.dimension):
-                if (i, j) in trajectoire:
-                    m += colorama.Back.LIGHTYELLOW_EX + colorama.Fore.RED
-
-                if (i, j) in self.des:
-                    m += "{:^3s}".format(self.afficher_de((i, j)))
-                else:
-                    m += "   "
-
-                if (i, j) in trajectoire:
-                    m += colorama.Fore.RESET + colorama.Back.RESET
-
-            m += "| {:<3d} \n".format(i)
-        m += ligne_interieure
-        m += ligne_exterieure.format('SO', 'SE')
-        return m
-
-    def __str__(self):
-        """
-        Pour afficher l'arène'.
-
-        Returns:
-            str: la représentation en chaîne de caractères
-        """
-        return self.affichage_string()
+    def affichage_arene(self, Lancer=None):
+        self.arene_canvas.create_image(0, 0, image=self.textures.arene_bg, anchor="nw")
+        for (i, j) in self.des.keys():
+            self.arene_canvas.create_image(775+(100*i), 300+(100*j), image=self.arene_tile, anchor="center")
+        self.arene_canvas.pack(fill="both", expand=True)
 
 
-# Le code suivant peut être exécuté pour afficher des exemples d'arènes, lorsque la classe « De » sera complétée
-if __name__ == '__main__':
-    arene_1 = Arene(5, De(), 1)
-    arene_2 = Arene(15, De(), 2)
-    print(arene_1)
-    print(arene_2)
+if __name__ == "__main__":
+    window = Tk()
+    window.geometry("1920x1080")
+    arene = Arene(window, 5, De(), 1920, 1080)
+    arene.affichage_arene()
+    window.mainloop()
