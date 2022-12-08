@@ -1,12 +1,9 @@
 from tkinter import *
-from mainmenu import MainMenu
+from index import *
 
 root = Tk()
-root.title('FightMatch')
-# root.geometry("1280x720")
-# root.geometry("1600x900")
-root.attributes('-fullscreen', True)
-root.iconbitmap(r'./Images/icon.ico')
+root.geometry("1600x900")
+# root.attributes('-fullscreen', True)
 root.update()
 width = root.winfo_width()
 height = root.winfo_height()
