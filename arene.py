@@ -1,6 +1,7 @@
 from tkinter import *
 from index import resize_image
 from de import De
+from time import sleep
 
 
 class GameTextureLoader:
@@ -26,7 +27,11 @@ class Arene:
         de_initial.lancer()
         while de_initial.valeur == 1:
             de_initial.lancer()
-        self.des = {(self.dimension // 2, self.dimension // 2): de_initial}
+        self.coordonnees = {}
+        for i in range(self.dimension):
+            for j in range(self.dimension):
+                self.coordonnees[(i, j)] = None
+        self.coordonnees[(self.dimension // 2, self.dimension // 2)] = de_initial
 
     def dans_arene(self, emplacement):
         """
@@ -241,7 +246,7 @@ class Arene:
 
     def affichage_arene(self, Lancer=None):
         self.arene_canvas.create_image(0, 0, image=self.textures.arene_bg, anchor="nw")
-        for (i, j) in self.des.keys():
+        for (i, j) in self.coordonnees.keys():
             self.arene_canvas.create_image(775+(100*i), 300+(100*j), image=self.arene_tile, anchor="center")
         self.arene_canvas.pack(fill="both", expand=True)
 
@@ -250,5 +255,7 @@ if __name__ == "__main__":
     window = Tk()
     window.geometry("1920x1080")
     arene = Arene(window, 5, De(), 1920, 1080)
+    arene.affichage_arene()
+    de_test = De()
     arene.affichage_arene()
     window.mainloop()
