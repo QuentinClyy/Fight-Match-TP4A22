@@ -74,8 +74,8 @@ class Arene:
         """
         # VOTRE CODE ICI
         for emplacement in trajectoire:
-            if emplacement in list(self.des.keys()):
-                self.des[emplacement].lancer()
+            if emplacement in list(self.coordonnees.keys()):
+                self.coordonnees[emplacement].lancer()
 
     def placer_nouveau_de(self, de, emplacement_final):
         """
@@ -93,7 +93,7 @@ class Arene:
         # VOTRE CODE ICI
         if self.dans_arene(emplacement_final):
             de.lancer()
-            self.des[emplacement_final] = de
+            self.coordonnees[emplacement_final] = de
 
     def effectuer_plusieurs_lancers(self, liste_lancers):
         """
@@ -141,7 +141,7 @@ class Arene:
         """
         # VOTRE CODE ICI
         emplacement_liste = []
-        for emplacement, de in self.des.items():
+        for emplacement, de in self.coordonnees.items():
             if de.valeur == 1:
                 emplacement_liste.append(emplacement)
         for emplacement in emplacement_liste:
@@ -160,7 +160,7 @@ class Arene:
         """
         # VOTRE CODE ICI
         comptes = {2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
-        for de in self.des.values():
+        for de in self.coordonnees.values():
             if not de.valeur == 'X':
                 comptes[de.valeur] += 1
         return comptes
@@ -181,7 +181,7 @@ class Arene:
         """
         # VOTRE CODE ICI
         liste_emplacement = []
-        for emplacement, de in self.des.items():
+        for emplacement, de in self.coordonnees.items():
             if comptes[de.valeur] > 1:
                 liste_emplacement.append(emplacement)
         for emplacement in liste_emplacement:
@@ -212,7 +212,7 @@ class Arene:
             bool: True si aucun dé n'est présent, False sinon.
         """
         # VOTRE CODE ICI
-        if self.des == {}:
+        if self.coordonnees == {}:
             return True
         else:
             return False
@@ -225,7 +225,7 @@ class Arene:
             emplacement ((int, int)): L'emplacement du dé à éliminer.
         """
         # VOTRE CODE ICI
-        del self.des[emplacement]
+        del self.coordonnees[emplacement]
 
     def rendre_au_joueur(self, emplacement, joueur):
         """
@@ -237,7 +237,7 @@ class Arene:
             joueur (Joueur): Le joueur à qui rendre le dé
         """
         # VOTRE CODE ICI
-        joueur.rendre_de(self.des[emplacement])
+        joueur.rendre_de(self.coordonnees[emplacement])
         self.retirer_de(emplacement)
 
     def afficher_de(self):

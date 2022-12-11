@@ -1,4 +1,5 @@
 from helper import *
+from musicPlayer import *
 
 
 class BaseMenu(tk.Frame):
@@ -68,20 +69,31 @@ class ArenaSizeMenu(BaseMenu):
         self.small_arena_button = create_menu_button(self.master, "Small", self.width, self.height, self.textures)
         self.mid_arena_button = create_menu_button(self.master, "Medium", self.width, self.height, self.textures)
         self.big_arena_button = create_menu_button(self.master, "Large", self.width, self.height, self.textures)
+        self.small_quit_button = create_small_quit_button(self.master, "Back", self.textures)
+        self.small_quit_button.config(command=self.back_command)
 
     def arena_size_menu_init(self):
         self.bg_init(self.size_arena_canvas)
         self.size_arena_canvas.create_window((self.width/2),
-                                             (self.height - self.height / 1.75),
+                                             (self.height - self.height/1.75),
                                              anchor="center",
                                              window=self.small_arena_button)
         self.size_arena_canvas.create_window((self.width/2),
-                                             (self.height - self.height / 2.8),
+                                             (self.height - self.height/2.8),
                                              anchor="center",
                                              window=self.mid_arena_button)
         self.size_arena_canvas.create_window((self.width/2),
-                                             (self.height - self.height / 7),
+                                             (self.height - self.height/7),
                                              anchor="center",
                                              window=self.big_arena_button)
+        self.size_arena_canvas.create_window(self.width-(self.width/38.4),
+                                             self.height-(self.height/21.6),
+                                             anchor="se",
+                                             window=self.small_quit_button)
 
         self.size_arena_canvas.pack(fill="both", expand=True)
+
+    def back_command(self):
+        self.size_arena_canvas.destroy()
+        mainmenu = MainMenu(self.master, self.width, self.height)
+        mainmenu.main_menu_init()
