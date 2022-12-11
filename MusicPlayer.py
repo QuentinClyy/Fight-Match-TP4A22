@@ -1,7 +1,5 @@
 import pygame
 import tkinter as tk
-from time import sleep
-
 
 class MusicPlayer:
 
