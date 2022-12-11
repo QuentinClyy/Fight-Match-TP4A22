@@ -13,6 +13,7 @@ class MenuTextureLoader:
         self.menu_right_char = resize_image("rightWarrior.png", self.width, self.height)
         self.menu_title = resize_image("titleSecond.png", self.width, self.height)
         self.button_panel = resize_image("Panel.png", int(self.width/2.367), int(self.height/5))
+        self.small_button_panel = resize_image("smallButton.png", self.width/38.4, self.height/21.6)
 
 
 def create_menu_button(master, text, width, height, textures):
@@ -23,7 +24,21 @@ def create_menu_button(master, text, width, height, textures):
                                bg='#4d330f', activebackground='#4d330f',
                                fg='#ad2513', activeforeground='#63170d')
     created_button.config(image=textures.button_panel, text=text, compound="center")
-    button_font = font.Font(family='Roman', size=50, weight='bold')
+    button_font = font.Font(family='Roman', size=50)
+    created_button['font'] = button_font
+    created_button.pack(padx=10, pady=10)
+    return created_button
+
+
+def create_small_quit_button(master, text, textures):
+    created_button = tk.Button(master,
+                               height=50,
+                               width=50,
+                               borderwidth=0,
+                               bg='#4d330f', activebackground='#4d330f',
+                               fg='#ad2513', activeforeground='#63170d')
+    created_button.config(image=textures.small_button_panel, text=text, compound="center")
+    button_font = font.Font(family='Roman', size=10, weight='bold')
     created_button['font'] = button_font
     created_button.pack(padx=10, pady=10)
     return created_button

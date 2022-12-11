@@ -12,7 +12,7 @@ height = root.winfo_height()
 main_menu = MainMenu(root, width, height)
 main_menu.main_menu_init()
 
-musicplayer = MusicPlayer()
-musicplayer.play_music()
+music_player = MusicPlayer()
+music_player.play_music()
 
 root.mainloop()
