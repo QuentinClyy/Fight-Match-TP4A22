@@ -12,11 +12,10 @@ class MenuTextureLoader:
         self.menu_left_char = resize_image("leftWarrior.png", self.width, self.height)
         self.menu_right_char = resize_image("rightWarrior.png", self.width, self.height)
         self.menu_title = resize_image("titleSecond.png", self.width, self.height)
-        self.button_panel = tk.PhotoImage(file="./Images/Panel.png")
+        self.button_panel = resize_image("Panel.png", int(self.width/2.367), int(self.height/5))
 
 
-def create_menu_button(master, text, width, height):
-    textures = MenuTextureLoader(width, height)
+def create_menu_button(master, text, width, height, textures):
     created_button = tk.Button(master,
                                height=int(height / 5),
                                width=int(width / 2.4),
