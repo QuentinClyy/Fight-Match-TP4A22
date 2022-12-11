@@ -1,7 +1,6 @@
 from tkinter import *
-from index import resize_image
+from helper import *
 from de import De
-from time import sleep
 
 
 class GameTextureLoader:
