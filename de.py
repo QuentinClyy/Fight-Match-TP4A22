@@ -5,23 +5,25 @@ Représente un dé à 6 faces.
 """
 
 from random import randint
+from helper import *
 
 
-class De:
+class De(GameTextureLoader):
     """ Représente un dé à 6 faces.
 
     Attributes:
         valeur (int): Un nombre de 1 à 6 inclusivement.
     """
 
-    def __init__(self):
+    def __init__(self, width, height):
+        super().__init__(width, height)
         """
         Constructeur de la classe De.
         Avant d'être lancé, sa valeur est None.
         """
         self.valeur = None
 
-    def affichage_string(self, mode):
+    def affichage_de(self, mode):
         """
         Donne la représentation en chaîne de caractères de la valeur
         du dé, selon le mode [2,3,4,5,6] ou [⚁,⚂,⚃,⚄,⚅].
@@ -34,13 +36,11 @@ class De:
             str: La représentation de la valeur du dé.
         """
         # VOTRE CODE ICI
-        if self.valeur == 1:
-            string_valeur = 'X'
-            return string_valeur
+        if mode == 1:
+            pass
         elif mode == 2:
-            liste = ['⚁', '⚂', '⚃', '⚄', '⚅']
-            return liste[int(self.valeur) - 2]
-        return f'{self.valeur}'
+            liste = ["de_1", "de_2", "de_3", "de_4", "de_5", "de_6"]
+            return liste[int(self.valeur) - 1]
 
     def lancer(self):
         """

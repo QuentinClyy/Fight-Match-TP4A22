@@ -3,34 +3,49 @@ from helper import *
 from de import De
 
 
-class GameTextureLoader:
-
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self.arene_bg = resize_image("arena.png", self.width, self.height)
-
-
 class Arene:
 
-    def __init__(self, master, dimension, de_initial, width, height):
+    def __init__(self, master, dimension, de_initial, width, height, mode_affichage):
         self.master = master
         self.width = width
         self.height = height
         self.dimension = dimension
+        self.mode_affichage = mode_affichage
+
         self.textures = GameTextureLoader(self.width, self.height)
         self.arene_canvas = Canvas(self.master, width=self.width, height=self.height)
 
-        self.arene_tile = resize_image("tile.png", self.width//32, self.height//18)
+        self.des = {}
+        self.creer_dict_des(de_initial)
 
+    def creer_dict_des(self, de_initial):
         de_initial.lancer()
         while de_initial.valeur == 1:
             de_initial.lancer()
-        self.coordonnees = {}
-        for i in range(self.dimension):
-            for j in range(self.dimension):
-                self.coordonnees[(i, j)] = None
-        self.coordonnees[(self.dimension // 2, self.dimension // 2)] = de_initial
+        #ajout en pixel pour centrer la grille selon la dimension de l'arene
+        width_addition = 0
+        height_addition = 0
+        center_factor = 0
+        if self.dimension == 5:
+            width_addition = 775
+            height_addition = 300
+            center_factor = 2.5
+        elif self.dimension == 7:
+            width_addition = 675
+            height_addition = 250
+            center_factor = 7 // 3
+        elif self.dimension == 9:
+            width_addition = 610
+            height_addition = 200
+            center_factor = 7 // 3
+        #creation du dict de des avec les coordonnees de l'arene
+        for x in range(self.dimension):
+            for y in range(self.dimension):
+                self.des[width_addition+(90*x), height_addition+(90*y)] = None
+        self.des[width_addition+90*(self.dimension // center_factor),
+                 height_addition+90*(self.dimension // center_factor)] \
+            = de_initial
+        print(self.des)
 
     def dans_arene(self, emplacement):
         """
@@ -74,8 +89,8 @@ class Arene:
         """
         # VOTRE CODE ICI
         for emplacement in trajectoire:
-            if emplacement in list(self.coordonnees.keys()):
-                self.coordonnees[emplacement].lancer()
+            if emplacement in list(self.des.keys()):
+                self.des[emplacement].lancer()
 
     def placer_nouveau_de(self, de, emplacement_final):
         """
@@ -93,7 +108,7 @@ class Arene:
         # VOTRE CODE ICI
         if self.dans_arene(emplacement_final):
             de.lancer()
-            self.coordonnees[emplacement_final] = de
+            self.des[emplacement_final] = de
 
     def effectuer_plusieurs_lancers(self, liste_lancers):
         """
@@ -141,7 +156,7 @@ class Arene:
         """
         # VOTRE CODE ICI
         emplacement_liste = []
-        for emplacement, de in self.coordonnees.items():
+        for emplacement, de in self.des.items():
             if de.valeur == 1:
                 emplacement_liste.append(emplacement)
         for emplacement in emplacement_liste:
@@ -160,7 +175,7 @@ class Arene:
         """
         # VOTRE CODE ICI
         comptes = {2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
-        for de in self.coordonnees.values():
+        for de in self.des.values():
             if not de.valeur == 'X':
                 comptes[de.valeur] += 1
         return comptes
@@ -181,7 +196,7 @@ class Arene:
         """
         # VOTRE CODE ICI
         liste_emplacement = []
-        for emplacement, de in self.coordonnees.items():
+        for emplacement, de in self.des.items():
             if comptes[de.valeur] > 1:
                 liste_emplacement.append(emplacement)
         for emplacement in liste_emplacement:
@@ -212,7 +227,7 @@ class Arene:
             bool: True si aucun dé n'est présent, False sinon.
         """
         # VOTRE CODE ICI
-        if self.coordonnees == {}:
+        if self.des == {}:
             return True
         else:
             return False
@@ -225,7 +240,7 @@ class Arene:
             emplacement ((int, int)): L'emplacement du dé à éliminer.
         """
         # VOTRE CODE ICI
-        del self.coordonnees[emplacement]
+        del self.des[emplacement]
 
     def rendre_au_joueur(self, emplacement, joueur):
         """
@@ -237,24 +252,38 @@ class Arene:
             joueur (Joueur): Le joueur à qui rendre le dé
         """
         # VOTRE CODE ICI
-        joueur.rendre_de(self.coordonnees[emplacement])
+        joueur.rendre_de(self.des[emplacement])
         self.retirer_de(emplacement)
 
     def afficher_de(self):
-       pass
+        for coordonnes, de in self.des.items():
+            if de is not None:
+                (x, y) = coordonnes
+                valeur_de = de.affichage_de(self.mode_affichage)
+                self.arene_canvas.create_image(x, y, image=getattr(self.textures, valeur_de), anchor="center")
 
-    def affichage_arene(self, Lancer=None):
+    def affichage_arene(self, lancer=None):
         self.arene_canvas.create_image(0, 0, image=self.textures.arene_bg, anchor="nw")
-        for (i, j) in self.coordonnees.keys():
-            self.arene_canvas.create_image(775+(100*i), 300+(100*j), image=self.arene_tile, anchor="center")
+        if lancer is None:
+            trajectoire = []
+        elif type(lancer) is list:
+            trajectoire = lancer
+        else:
+            trajectoire = lancer.trajectoire
+
+        for (x, y) in self.des.keys():
+            if (x, y) in trajectoire:
+                self.arene_canvas.create_image(x, y, image=self.textures.arene_tile_dark, anchor="center")
+            else:
+                self.arene_canvas.create_image(x, y, image=self.textures.arene_tile, anchor="center")
+        self.afficher_de()
         self.arene_canvas.pack(fill="both", expand=True)
 
 
 if __name__ == "__main__":
     window = Tk()
     window.geometry("1920x1080")
-    arene = Arene(window, 5, De(), 1920, 1080)
-    arene.affichage_arene()
-    de_test = De()
+    arene = Arene(window, 9, De(1920, 1080), 1920, 1080, 2)
+    de_test = De(1920, 1080)
     arene.affichage_arene()
     window.mainloop()

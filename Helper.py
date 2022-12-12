@@ -3,6 +3,22 @@ import tkinter.font as font
 from PIL import Image, ImageTk
 
 
+class GameTextureLoader:
+
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.arene_bg = resize_image("arena.png", self.width, self.height)
+        self.arene_tile = resize_image("tile.png", self.width // 32, self.height // 18)
+        self.arene_tile_dark = resize_image("tile_dark.png", self.width // 32, self.height // 18)
+        self.de_1 = resize_image("DeX.png", self.width // 32, self.height // 13)
+        self.de_2 = resize_image("De2.png", self.width // 32, self.height // 13)
+        self.de_3 = resize_image("De3.png", self.width // 32, self.height // 13)
+        self.de_4 = resize_image("De4.png", self.width // 32, self.height // 13)
+        self.de_5 = resize_image("De5.png", self.width // 32, self.height // 13)
+        self.de_6 = resize_image("De6.png", self.width // 32, self.height // 13)
+
+
 class MenuTextureLoader:
 
     def __init__(self, width, height):
