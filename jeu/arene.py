@@ -1,15 +1,10 @@
 from tkinter import *
-from interface.helper import *
-from de import De
+from jeu.de import De
 
 
 class Arene:
 
-    def __init__(self, master, dimension, de_initial, canvas_arene, mode_affichage):
-        self.master = master
-        self.arene_canvas = canvas_arene
-        self.width = canvas_arene.width
-        self.height = canvas_arene.height
+    def __init__(self, dimension, de_initial, mode_affichage):
         self.dimension = dimension
         self.mode_affichage = mode_affichage
 
@@ -251,12 +246,3 @@ class Arene:
         # VOTRE CODE ICI
         joueur.rendre_de(self.des[emplacement])
         self.retirer_de(emplacement)
-
-
-if __name__ == "__main__":
-    window = Tk()
-    window.geometry("1920x1080")
-    arene = Arene(window, 7, De(1920, 1080), 1920, 1080, 2)
-    de_test = De(1920, 1080)
-    arene.affichage_arene()
-    window.mainloop()

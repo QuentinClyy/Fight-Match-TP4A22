@@ -32,9 +32,6 @@ class MenuTextureLoader:
         self.small_button_panel = resize_image("smallButton.png", self.width/38.4, self.height/21.6)
 
 
-
-
-
 def resize_image(img_name, width, height):
     load_img = Image.open(f"./Images/{img_name}")
     res_img = load_img.resize((int(width), int(height)), resample=Image.NEAREST)

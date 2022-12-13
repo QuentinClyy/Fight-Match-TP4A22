@@ -5,18 +5,17 @@ Représente un dé à 6 faces.
 """
 
 from random import randint
-from helper import *
+import interface.texture_loader as tl
 
 
-class De(GameTextureLoader):
+class De:
     """ Représente un dé à 6 faces.
 
     Attributes:
         valeur (int): Un nombre de 1 à 6 inclusivement.
     """
 
-    def __init__(self, width, height):
-        super().__init__(width, height)
+    def __init__(self):
         """
         Constructeur de la classe De.
         Avant d'être lancé, sa valeur est None.

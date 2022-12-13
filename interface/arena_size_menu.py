@@ -1,5 +1,5 @@
-import menu
-import main_menu as mm
+import interface.menu as menu
+import interface.main_menu as mm
 import tkinter as tk
 
 

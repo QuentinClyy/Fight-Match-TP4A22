@@ -1,5 +1,8 @@
 from tkinter import Canvas, ALL, LAST
 from texture_loader import GameTextureLoader
+from jeu.arene import Arene
+from jeu.de import De
+import tkinter as tk
 
 
 class CanvasArene(Canvas):
@@ -12,6 +15,8 @@ class CanvasArene(Canvas):
         Args:
             master (Tk): Le widget TKinter dans lequel le canvas s'intègre.
             arene (Arene): L'arène des GlaDéateurs à afficher.
+            width (int): Largeur du canvas
+            height (int): Hauteur du canvas
         """
         self.arene = arene
         self.width = width
@@ -46,3 +51,13 @@ class CanvasArene(Canvas):
                 self.create_image(x, y, image=self.textures.arene_tile, anchor="center")
         self.afficher_de()
         self.pack(fill="both", expand=True)
+
+
+if __name__ == "__main__":
+    window = tk.Tk()
+    window.geometry("1920x1080")
+    arene = Arene(7, De(), 2)
+    de_test = De()
+    canvas = CanvasArene(window, arene, 1920, 1080)
+    canvas.affichage_arene()
+    window.mainloop()

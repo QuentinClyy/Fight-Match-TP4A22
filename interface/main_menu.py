@@ -1,5 +1,5 @@
-import menu
-import arena_size_menu as asm
+import interface.menu as menu
+import interface.arena_size_menu as asm
 import tkinter as tk
 
 
