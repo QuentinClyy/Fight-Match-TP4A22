@@ -1,6 +1,6 @@
 from tkinter import *
-from index import *
-from musicPlayer import *
+from interface.index import *
+from interface.musicPlayer import *
 
 root = Tk()
 # root.geometry("1600x900")
