@@ -27,7 +27,7 @@ class MenuTextureLoader:
         self.menu_bg = resize_image("background.png", self.width, self.height)
         self.menu_left_char = resize_image("leftWarrior.png", self.width, self.height)
         self.menu_right_char = resize_image("rightWarrior.png", self.width, self.height)
-        self.menu_title = resize_image("titleSecond.png", self.width, self.height)
+        self.menu_title = resize_image("title.png", self.width, self.height)
         self.button_panel = resize_image("Panel.png", int(self.width/2.367), int(self.height/5))
         self.small_button_panel = resize_image("smallButton.png", self.width/38.4, self.height/21.6)
 
