@@ -1,5 +1,5 @@
 from tkinter import Canvas, ALL, LAST
-from helper import GameTextureLoader
+from texture_loader import GameTextureLoader
 
 
 class CanvasArene(Canvas):

@@ -1,5 +1,5 @@
-from helper import *
-from musicPlayer import *
+from texture_loader import *
+import tkinter as tk
 
 
 class BaseMenu(tk.Frame):
