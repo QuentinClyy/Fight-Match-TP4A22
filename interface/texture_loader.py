@@ -32,32 +32,7 @@ class MenuTextureLoader:
         self.small_button_panel = resize_image("smallButton.png", self.width/38.4, self.height/21.6)
 
 
-def create_menu_button(master, text, width, height, textures):
-    created_button = tk.Button(master,
-                               height=int(height / 5),
-                               width=int(width / 2.4),
-                               borderwidth=0,
-                               bg='#4d330f', activebackground='#4d330f',
-                               fg='#ad2513', activeforeground='#63170d')
-    created_button.config(image=textures.button_panel, text=text, compound="center")
-    button_font = font.Font(family='Roman', size=50)
-    created_button['font'] = button_font
-    created_button.pack(padx=10, pady=10)
-    return created_button
 
-
-def create_small_quit_button(master, text, textures):
-    created_button = tk.Button(master,
-                               height=50,
-                               width=50,
-                               borderwidth=0,
-                               bg='#4d330f', activebackground='#4d330f',
-                               fg='#ad2513', activeforeground='#63170d')
-    created_button.config(image=textures.small_button_panel, text=text, compound="center")
-    button_font = font.Font(family='Roman', size=10, weight='bold')
-    created_button['font'] = button_font
-    created_button.pack(padx=10, pady=10)
-    return created_button
 
 
 def resize_image(img_name, width, height):

@@ -1,5 +1,5 @@
 from tkinter import *
-from interface.index import *
+from interface.main_menu import *
 from interface.musicPlayer import *
 
 root = Tk()
