@@ -9,35 +9,11 @@ class Arene:
         self.mode_affichage = mode_affichage
 
         self.des = {}
-        self.creer_dict_des(de_initial)
-
-    def creer_dict_des(self, de_initial):
         de_initial.lancer()
         while de_initial.valeur == 1:
             de_initial.lancer()
-        #ajout en pixel pour centrer la grille selon la dimension de l'arene
-        width_addition = 0
-        height_addition = 0
-        center_factor = 0
-        if self.dimension == 5:
-            width_addition = 775
-            height_addition = 300
-            center_factor = 2.5
-        elif self.dimension == 7:
-            width_addition = 675
-            height_addition = 250
-            center_factor = 7 // 3
-        elif self.dimension == 9:
-            width_addition = 610
-            height_addition = 200
-            center_factor = 7 // 3
-        #creation du dict de des avec les coordonnees de l'arene en pixels
-        for x in range(self.dimension):
-            for y in range(self.dimension):
-                self.des[width_addition+(90*x), height_addition+(90*y)] = None
-        self.des[width_addition+90*(self.dimension // center_factor),
-                 height_addition+90*(self.dimension // center_factor)] \
-            = de_initial
+        self.des = {(self.dimension // 2, self.dimension // 2): de_initial}
+        self.mode_affichage = mode_affichage
 
     def dans_arene(self, emplacement):
         """
@@ -246,3 +222,16 @@ class Arene:
         # VOTRE CODE ICI
         joueur.rendre_de(self.des[emplacement])
         self.retirer_de(emplacement)
+
+    def afficher_de(self, emplacement):
+        """
+        Donne la représentation en chaîne de caractères du dé situé à l'emplacement
+        spécifié en paramètre, selon le mode d'affichage.
+
+        Args:
+            emplacement ((int, int)): L'emplacement du dé à afficher
+
+        Returns:
+            str: La chaîne représentant le dé
+        """
+        return self.des[emplacement].affichage_string(self.mode_affichage)

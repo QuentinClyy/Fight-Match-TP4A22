@@ -1,8 +1,8 @@
-from tkinter import *
-from interface.main_menu import *
-from interface.musicPlayer import *
+import tkinter as tk
+from interface.main_menu import MainMenu
+from interface.music_player import MusicPlayer
 
-root = Tk()
+root = tk.Tk()
 # root.geometry("1600x900")
 root.attributes('-fullscreen', True)
 root.update()

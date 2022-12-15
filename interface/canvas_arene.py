@@ -1,5 +1,6 @@
 from tkinter import Canvas, ALL, LAST
 from interface.texture_loader import GameTextureLoader
+import itertools
 
 
 class CanvasArene(Canvas):
@@ -18,14 +19,104 @@ class CanvasArene(Canvas):
         self.arene = arene
         self.width = width
         self.height = height
+        self.textures = GameTextureLoader(self.width, self.height)
         super().__init__(master, width=self.width,
                          height=self.height,
                          borderwidth=0, highlightthickness=0)
 
-        self.textures = GameTextureLoader(self.width, self.height)
-        self.des = self.arene.des
+        self.suite_clic = None
+        self.coordonnees_cliquables = lambda coordonnees: False
+        self.bind("<Button-1>", self.selectionner_case)
 
-    def dessiner_un_de(self, valeur_de):
+        self.affichage_arene(lambda: None)
+
+    def placement_arene(self):
+        """
+
+        Returns:
+            tuple:
+
+        """
+        width_addition = 0
+        height_addition = 0
+        if self.arene.dimension == 5:
+            width_addition = 775
+            height_addition = 300
+        elif self.arene.dimension == 7:
+            width_addition = 675
+            height_addition = 250
+        elif self.arene.dimension == 9:
+            width_addition = 610
+            height_addition = 200
+
+        return width_addition, height_addition
+
+    def coordonnees_en_pixel(self, x, y):
+        """
+        Cette méthode des coordonnées de l'arène en position en pixels
+
+        Args:
+            x (int): La coordonnée en x
+            y (int): La coordonnée en y
+
+        Returns:
+            tuple: La position en pixels.
+        """
+        (width_addition, height_addition) = self.placement_arene()
+
+        x_return = width_addition + 90 * x
+        y_return = height_addition + 90 * y
+
+        return x_return, y_return
+
+    def pixel_en_coordonnees(self, x_pixel, y_pixel):
+        """
+        Cette méthode convertit la position d'un clic en coordonnées de l'arène.
+
+        Args:
+            x_pixel: La position du clic, en x (de haut en bas)
+            y_pixel: La position du clic, en y (de gauche à droite)
+
+        Returns:
+            tuple: Les coordonnées de la case cliquée.
+        """
+        (width_addition, height_addition) = self.placement_arene()
+
+        x_return =  (x_pixel - width_addition) // 90
+        y_return =  (y_pixel - height_addition) // 90
+
+        return x_return, y_return
+
+    def selectionner_case(self, event):
+        """
+        Cette méthode prend en argument un clic de souris sur le canvas, et actionne
+        la fonction définie comme devant faire suite au clic (self.suite_clic), dont
+        l'argument est en coordonnées plutôt qu'en pixels.
+
+        Args:
+            event (tkinter.Event): L'événement correspondant au clic
+
+        """
+        x, y = event.y, event.x  # nos coordonnées sont transposées par rapport aux pixels
+        coordonnees = self.pixel_en_coordonnees(x, y)
+        if self.suite_clic is not None and self.coordonnees_cliquables(coordonnees):
+            self.suite_clic(coordonnees)
+
+    def dessiner_un_de(self, valeur_de, gauche, haut, droite, bas):
+        """
+        Cette methode dessine un seul de en utilisant l'interface Tkinter en fonction de sa valeur
+        et des coordonnees limites en pixel de la case sur laquelle il se trouve.
+
+        Args:
+            valeur_de (str): la valeur du de en string
+            gauche (int): limite de la gauche de la case du de en pixel
+            haut (int): limite du haut de la case du de en pixel
+            droite (int): limite de la droite de la case du de en pixel
+            bas (int): limite du bas de la case du de en pixel
+        """
+        self.create_rectangle(gauche, haut, droite, bas, fill='white',
+                              outline='black', width=3)
+
         exterieur = (droite - gauche) // 10
         interieur = (droite - gauche - 4 * exterieur) // 3
         if valeur_de in ["⚀", "⚂", "⚄"]:
@@ -49,32 +140,56 @@ class CanvasArene(Canvas):
                              gauche + exterieur + interieur, haut + 2 * exterieur + 2 * interieur, fill='black')
 
     def dessiner_tous_les_des(self):
-        # valeur_de, x, y = 0, 0, 0
-        for coordonnes, de in self.des.items():
+        """
+        Dessine tous les des selon leur mode d'affichage (1 = un de "tkinter", 2 = un galdeateur en pixel art)
+        """
+        for coordonnes, de in self.arene.des.items():
             if de is not None:
                 x, y = coordonnes
+                x_pixel, y_pixel = self.coordonnees_en_pixel(x, y)
                 valeur_de = de.affichage_string(self.arene.mode_affichage)
-                print(valeur_de)
                 if valeur_de in ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"]:
-                    pass
+                    gauche = x_pixel + self.width // 85
+                    haut = y_pixel + self.height // 47
+                    droite = x_pixel - self. width // 85
+                    bas = y_pixel - self.height // 47
+                    self.dessiner_un_de(valeur_de, gauche, haut, droite, bas)
                 else:
-                    self.create_image(x, y, image=getattr(self.textures, valeur_de), anchor="center")
+                    self.create_image(x_pixel, y_pixel, image=getattr(self.textures, valeur_de), anchor="center")
 
-    def affichage_arene(self, lancer=None):
+    def permettre_clics(self, case_cliquable, suite_clic):
+        """
+        Cette méthode associe une fonction à exécuter à ce qui doit arriver suite
+        à un clic, pour les cases où le clic est permis.
+
+        Args:
+            case_cliquable (fonction): Fonction qui détermine si des coordonnées sont cliquables
+            suite_clic (fonction): Fonction à exécuter suite au clic d'une cases
+        """
+        self.coordonnees_cliquables = case_cliquable
+        self.suite_clic = suite_clic
+        self.affichage_arene(lambda: None)
+
+    def affichage_arene(self, suite):
         self.create_image(0, 0, image=self.textures.arene_bg, anchor="nw")
-        if lancer is None:
-            trajectoire = []
-        elif type(lancer) is list:
-            trajectoire = lancer
-        else:
-            trajectoire = lancer.trajectoire
 
-        for (x, y) in self.des.keys():
-            if (x, y) in trajectoire:
-                self.create_image(x, y, image=self.textures.arene_tile_dark, anchor="center")
-            else:
-                self.create_image(x, y, image=self.textures.arene_tile, anchor="center")
+        for x, y in itertools.product(range(self.arene.dimension), range(self.arene.dimension)):
+            (x_pixel, y_pixel) = self.coordonnees_en_pixel(x, y)
+            self.create_image(x_pixel, y_pixel, image=self.textures.arene_tile, anchor="center")
         self.dessiner_tous_les_des()
         self.pack(fill="both", expand=True)
 
+        suite()
 
+    def affichage_lancer(self, lancer, temps_attente, suite):
+        self.suite_clic = None
+        self.coordonnees_cliquables = lambda _: False
+        traj = lancer.trajectoire
+        for i in range(len(traj) - 1):
+            x1, y1 = traj[i]
+            x2, y2 = traj[i + 1]
+            self.create_line(*self.coordonnees_en_pixel(y1, x1),
+                             *self.coordonnees_en_pixel(y2, x2),
+                             arrow=LAST)
+
+        self.after(temps_attente, suite)
