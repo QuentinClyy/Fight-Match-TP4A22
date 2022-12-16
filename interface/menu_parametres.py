@@ -71,7 +71,7 @@ class ArenaSizeMenu(Menu):
 
     def size_arena_command(self, valeur):
         self.arene_size = valeur
-        self.master.switch_menu_canvas(NombreDeMenu)
+        self.master.switch_menu_canvas(NombreJoueursMenu)
 
 
 class NombreDeMenu(Menu):
@@ -104,7 +104,7 @@ class NombreJoueursMenu(Menu):
                            window=self.start_button)
 
         self.back_button = self.create_back_button("Back", self.textures)
-        self.back_button.config(command=lambda: master.switch_menu_canvas(NombreDeMenu))
+        self.back_button.config(command=lambda: master.switch_menu_canvas(ArenaSizeMenu))
         self.create_window((self.width - self.width // 38.4),
                            (self.height - self.height // 21.6),
                            anchor="se",
