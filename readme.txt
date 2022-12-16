@@ -20,4 +20,6 @@ et en s'assurant que le path des scripts est specifies dans les environnement va
 
     'pip install pillow'
 
+Attention ! les dimensions de l'arene doivent etre 5, 7 ou 9 pour que l'arene s'affiche correctement
+
 Enjoy !

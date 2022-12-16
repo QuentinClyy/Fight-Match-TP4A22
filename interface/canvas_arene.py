@@ -4,7 +4,7 @@ import itertools
 
 
 class CanvasArene(Canvas):
-    def __init__(self, master, arene, width, height):
+    def __init__(self, master, arene):
         """
         Constructeur de la classe CanvasArene. Attribue les dimensions en pixels
         en fonction des dimensions de l'arène, dessine l'arène dans l'interface
@@ -16,13 +16,9 @@ class CanvasArene(Canvas):
             width (int): Largeur du canvas
             height (int): Hauteur du canvas
         """
+        super().__init__(master)
         self.arene = arene
-        self.width = width
-        self.height = height
-        self.textures = GameTextureLoader(self.width, self.height)
-        super().__init__(master, width=self.width,
-                         height=self.height,
-                         borderwidth=0, highlightthickness=0)
+        self.textures = GameTextureLoader(self.master.width, self.master.height)
 
         self.suite_clic = None
         self.coordonnees_cliquables = lambda coordonnees: False
@@ -149,10 +145,10 @@ class CanvasArene(Canvas):
                 x_pixel, y_pixel = self.coordonnees_en_pixel(x, y)
                 valeur_de = de.affichage_string(self.arene.mode_affichage)
                 if valeur_de in ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"]:
-                    gauche = x_pixel + self.width // 85
-                    haut = y_pixel + self.height // 47
-                    droite = x_pixel - self. width // 85
-                    bas = y_pixel - self.height // 47
+                    gauche = x_pixel + self.master.width // 85
+                    haut = y_pixel + self.master.height // 47
+                    droite = x_pixel - self.master.width // 85
+                    bas = y_pixel - self.master.height // 47
                     self.dessiner_un_de(valeur_de, gauche, haut, droite, bas)
                 else:
                     self.create_image(x_pixel, y_pixel, image=getattr(self.textures, valeur_de), anchor="center")

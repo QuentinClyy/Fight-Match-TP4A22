@@ -1,7 +1,7 @@
-from interface.menu_switch import Switch
+from interface.fenetre_principale import FenetrePrincipale
 from interface.music_player import MusicPlayer
 
-root = Switch()
+root = FenetrePrincipale()
 
 music_player = MusicPlayer()
 music_player.play_music()
