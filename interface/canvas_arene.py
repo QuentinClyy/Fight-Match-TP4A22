@@ -1,6 +1,6 @@
-from tkinter import Canvas, ALL, LAST
+from tkinter import Canvas, ALL, LAST, Button
+import tkinter.font as font
 from interface.texture_loader import GameTextureLoader
-import itertools
 
 
 class CanvasArene(Canvas):
@@ -20,11 +20,26 @@ class CanvasArene(Canvas):
         self.arene = arene
         self.textures = GameTextureLoader(self.master.width, self.master.height)
 
+        self.quit_button = Button(self,
+                                  width=int(self.master.width // 7.2),
+                                  height=int(self.master.height // 15),
+                                  borderwidth=0,
+                                  bg='#4d330f', activebackground='#4d330f',
+                                  fg='#ad2513', activeforeground='#63170d',
+                                  command=self.quit)
+        self.quit_button.config(image=self.textures.button_panel, text="Quit", compound="center")
+        button_font = font.Font(family='Roman', size=50)
+        self.quit_button['font'] = button_font
+        self.create_window((self.master.width - self.master.width // 10),
+                           (self.master.height - self.master.height // 20),
+                           anchor="center",
+                           window=self.quit_button)
+
         self.suite_clic = None
         self.coordonnees_cliquables = lambda coordonnees: False
         self.bind("<Button-1>", self.selectionner_case)
 
-        self.affichage_arene(lambda: None)
+        self.dessiner_canvas(lambda: None)
 
     def placement_arene(self):
         """
@@ -33,19 +48,19 @@ class CanvasArene(Canvas):
             tuple:
 
         """
-        width_addition = 0
         height_addition = 0
+        width_addition = 0
         if self.arene.dimension == 5:
-            width_addition = 775
-            height_addition = 300
+            width_addition = int(self.master.width // 2.56)
+            height_addition = int(self.master.height // 3.09)
         elif self.arene.dimension == 7:
-            width_addition = 675
-            height_addition = 250
+            width_addition = int(self.master.width // 2.84)
+            height_addition = int(self.master.height // 4.32)
         elif self.arene.dimension == 9:
-            width_addition = 610
-            height_addition = 200
+            width_addition = int(self.master.width // 3.34)
+            height_addition = int(self.master.height // 6.17)
 
-        return width_addition, height_addition
+        return height_addition, width_addition
 
     def coordonnees_en_pixel(self, x, y):
         """
@@ -60,8 +75,8 @@ class CanvasArene(Canvas):
         """
         (width_addition, height_addition) = self.placement_arene()
 
-        x_return = width_addition + 90 * x
-        y_return = height_addition + 90 * y
+        x_return = int(width_addition + self.master.width // 21.33 * x)
+        y_return = int(height_addition + self.master.height // 12 * y)
 
         return x_return, y_return
 
@@ -78,8 +93,8 @@ class CanvasArene(Canvas):
         """
         (width_addition, height_addition) = self.placement_arene()
 
-        x_return =  (x_pixel - width_addition) // 90
-        y_return =  (y_pixel - height_addition) // 90
+        x_return = int((x_pixel - width_addition) // (self.master.width // 21.33))
+        y_return = int((y_pixel - height_addition) // (self.master.height // 12))
 
         return x_return, y_return
 
@@ -98,7 +113,7 @@ class CanvasArene(Canvas):
         if self.suite_clic is not None and self.coordonnees_cliquables(coordonnees):
             self.suite_clic(coordonnees)
 
-    def dessiner_un_de(self, valeur_de, gauche, haut, droite, bas):
+    def dessiner_de(self, valeur_de, gauche, haut, droite, bas):
         """
         Cette methode dessine un seul de en utilisant l'interface Tkinter en fonction de sa valeur
         et des coordonnees limites en pixel de la case sur laquelle il se trouve.
@@ -112,7 +127,6 @@ class CanvasArene(Canvas):
         """
         self.create_rectangle(gauche, haut, droite, bas, fill='white',
                               outline='black', width=3)
-
         exterieur = (droite - gauche) // 10
         interieur = (droite - gauche - 4 * exterieur) // 3
         if valeur_de in ["⚀", "⚂", "⚄"]:
@@ -135,23 +149,15 @@ class CanvasArene(Canvas):
             self.create_oval(gauche + exterieur, haut + 2 * exterieur + interieur,
                              gauche + exterieur + interieur, haut + 2 * exterieur + 2 * interieur, fill='black')
 
-    def dessiner_tous_les_des(self):
+    def dessiner_gladiator(self, coordonnees, gauche, haut, droite, bas):
         """
         Dessine tous les des selon leur mode d'affichage (1 = un de "tkinter", 2 = un galdeateur en pixel art)
         """
-        for coordonnes, de in self.arene.des.items():
-            if de is not None:
-                x, y = coordonnes
-                x_pixel, y_pixel = self.coordonnees_en_pixel(x, y)
-                valeur_de = de.affichage_string(self.arene.mode_affichage)
-                if valeur_de in ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"]:
-                    gauche = x_pixel + self.master.width // 85
-                    haut = y_pixel + self.master.height // 47
-                    droite = x_pixel - self.master.width // 85
-                    bas = y_pixel - self.master.height // 47
-                    self.dessiner_un_de(valeur_de, gauche, haut, droite, bas)
-                else:
-                    self.create_image(x_pixel, y_pixel, image=getattr(self.textures, valeur_de), anchor="center")
+        valeur_de = self.arene.afficher_de(coordonnees)
+        if valeur_de in ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"]:
+            self.dessiner_de(valeur_de, gauche, haut, droite, bas)
+        else:
+            self.create_image(gauche, haut, image=getattr(self.textures, valeur_de), anchor="nw")
 
     def permettre_clics(self, case_cliquable, suite_clic):
         """
@@ -164,20 +170,27 @@ class CanvasArene(Canvas):
         """
         self.coordonnees_cliquables = case_cliquable
         self.suite_clic = suite_clic
-        self.affichage_arene(lambda: None)
+        self.dessiner_canvas(lambda: None)
 
-    def affichage_arene(self, suite):
+    def dessiner_canvas(self, suite):
+        self.delete(ALL)
         self.create_image(0, 0, image=self.textures.arene_bg, anchor="nw")
 
-        for x, y in itertools.product(range(self.arene.dimension), range(self.arene.dimension)):
-            (x_pixel, y_pixel) = self.coordonnees_en_pixel(x, y)
-            self.create_image(x_pixel, y_pixel, image=self.textures.arene_tile, anchor="center")
-        self.dessiner_tous_les_des()
-        self.pack(fill="both", expand=True)
+        for i in range(self.arene.dimension ** 2):
+            x, y = i // self.arene.dimension, i % self.arene.dimension
+            haut, gauche = self.coordonnees_en_pixel(x, y)
+            bas, droite = self.coordonnees_en_pixel(x + 1, y + 1)
+            if self.coordonnees_cliquables((x, y)):
+                remplissage = self.textures.arene_tile
+            else:
+                remplissage = self.textures.arene_tile_dark
+            self.create_image(gauche, haut, image=remplissage, anchor="nw")
+            if (x, y) in self.arene.des:
+                self.dessiner_gladiator((x, y), gauche, haut, droite, bas)
 
         suite()
 
-    def affichage_lancer(self, lancer, temps_attente, suite):
+    def afficher_lancer(self, lancer, temps_attente, suite):
         self.suite_clic = None
         self.coordonnees_cliquables = lambda _: False
         traj = lancer.trajectoire

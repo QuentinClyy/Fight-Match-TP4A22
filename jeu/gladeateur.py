@@ -17,7 +17,7 @@ class Gladeateur:
         joueur_index (int): L'index du joueur actif.
         premier_lancer (bool): False si le joueur actif a fait son premier lancé de dé, False sinon.
     """
-    def __init__(self, liste_joueurs, arene):
+    def __init__(self, liste_joueurs, arene, gestionnaire_io):
         """
         Constructeur de la classe Gladeateur.
 
@@ -27,46 +27,44 @@ class Gladeateur:
         """
         self.liste_joueurs = liste_joueurs
         self.arene = arene
+        self.gestionnaire_io = gestionnaire_io
         self.joueur_index = 0
         self.premier_lancer = True
 
     def jouer_partie(self):
         """
         Point d'entrée de la boucle de jeu. On commence par une sélection d'action.
+        """
+        self.selection_action()
 
+    def selection_action(self):
+        """
+        Fonction qui définit quelle action doit être jouée.
         Voir les commentaires dans le code.
         """
-        vainqueur = None
-
-        while vainqueur is None:
-            # On détermine l'action à faire pour le joueur en cours
-            joueur = self.joueur_en_cours()
-            tour_termine = False
-
-            if self.arene.est_vide():
-                tour_termine = True
-                if self.premier_lancer:
-                    # Si le joueur commence son tour sur une arène vide, c'est une table rase!
-                    self.afficher_arene(joueur)
-                    self.table_rase(joueur)
-            elif not self.premier_lancer:
-                # Si le joueur a déjà joué, il doit choisir de continuer (afficher arène puis
-                # effectuer un tour) ou pas (fin du tour)
-                tour_termine = not joueur.choisir_continuer()
-
-            if not tour_termine:
-                self.afficher_arene(joueur)
-                tour_termine = self.effectuer_tour(joueur)
-
-            if tour_termine:
-                self.fin_du_tour(joueur)
-
-            vainqueur = self.calculer_victoire()
 
         # Si le jeu est terminé, on affiche le joueur victorieux et on arrête
-        print("*" * 50)
-        print(f"Victoire du {str(vainqueur)}")
-        print("*" * 50)
+        vainqueur = self.calculer_victoire()
+        if self.calculer_victoire() is not None:
+            self.gestionnaire_io.afficher_victoire(vainqueur)
+        else:
+            # Sinon, on détermine l'action à faire pour le joueur en cours
+            joueur = self.joueur_en_cours()
+            if self.arene.est_vide():
+                if self.premier_lancer:
+                    # Si le joueur commence son tour sur une arène vide, c'est une table rase!
+                    self.afficher_arene(joueur, lambda: self.table_rase_a(joueur))
+                else:
+                    # Si le joueur vient d'éliminer les derniers dés dans l'arène,
+                    # il passe au prochain qui subira une table rase.
+                    self.fin_du_tour_a()
+            else:
+                # Si le joueur a déjà joué, il doit choisir de continuer (afficher arène puis
+                # effectuer un tour) ou pas (fin du tour)
+                joueur.choisir_continuer(self.premier_lancer,
+                                         lambda: self.afficher_arene(joueur,
+                                                                     lambda: self.effectuer_tour(joueur)),
+                                         self.fin_du_tour_a)
 
     def effectuer_tour(self, joueur):
         """
@@ -81,76 +79,130 @@ class Gladeateur:
         """
         if not joueur.est_elimine():
             self.premier_lancer = False
-            lancer = joueur.choisir_lancer()
-            tour_termine = self.tour_normal(lancer, joueur)
+            joueur.choisir_lancer(self.tour_normal_a)
         else:
-            tour_termine = True
-        return tour_termine
+            self.fin_du_tour_a()
 
-    def tour_normal(self, lancer, joueur):
+    def tour_normal_a(self, lancer, joueur):
         """
-        Affiche le lancer, puis effectue le rangement.
-        S'il y a correspondance lors de celui-ci, met fin au tour,
-        sinon recommence à la sélection d'action.
+        Affiche le lancer, puis poursuit le tour.
 
         Args:
             lancer (Lancer): le lancer à afficher
             joueur (Joueur): le joueur dont c'est le tour
-
-        Returns:
-            bool: True si le tour est terminé, False sinon
         """
-        print("Trajectoire : ", str(lancer))
-        self.arene.effectuer_lancer(lancer)
-        self.afficher_arene(None, lancer)
-        tour_termine = self.arene.rangement(joueur)
-        self.afficher_arene(joueur, None)
-        return tour_termine
+        self.gestionnaire_io.afficher_lancer(lancer,
+                                             lambda: self.tour_normal_b(lancer, joueur))
 
-    def fin_du_tour(self, joueur):
+    def tour_normal_b(self, lancer, joueur):
         """
-        Affiche la fin du tour, puis change de joueur,
-        tout en assurant que celui-ci sera à son premier lancer.
+        Exécute le lancer sur l'arène
 
         Args:
-            joueur (Joueur): Le joueur dont le tour se termine.
+            lancer (Lancer): le lancer à effectuer
+            joueur (Joueur): le joueur dont c'est le tour
         """
-        print(f"Fin du tour du {str(joueur)}.")
+        self.arene.effectuer_lancer(lancer)
+        self.afficher_arene(None, lambda: self.tour_normal_c(joueur))
+
+    def tour_normal_c(self, joueur):
+        """
+        Effectue le rangement, affiche l'arène, puis redémarre la boucle de jeu
+        avec une nouvelle sélection d'action.
+
+        Args:
+            joueur (Joueur): le joueur dont c'est le tour
+        """
+        correspondance = self.arene.rangement(joueur)
+        if correspondance:
+            prochaine_action = self.fin_du_tour_a
+        else:
+            prochaine_action = self.selection_action
+        self.afficher_arene(joueur, prochaine_action)
+
+    def fin_du_tour_a(self):
+        """
+        Affiche la fin du tour, puis poursuit le processus de fin du tour
+        """
+        self.gestionnaire_io.afficher_fin_tour(self.fin_du_tour_b)
+
+    def fin_du_tour_b(self):
+        """
+        Change de joueur, tout en assurant que celui-ci sera à son premier lancer.
+        """
         self.premier_lancer = True
         self.changer_joueur()
+        self.selection_action()
 
-    def table_rase(self, joueur):
+    def table_rase_a(self, joueur):
         """
         Affiche et déclenche une table rase pour le joueur.
 
         Args:
             joueur (Joueur): Le joueur qui subit la table rase.
         """
-        print("Table rase! ")
+        self.gestionnaire_io.afficher_table_rase(lambda: self.table_rase_b(joueur))
+
+    def table_rase_b(self, joueur):
+        """
+        Obtient les lancers de table rase du joueur et les affiche, puis poursuit
+        le processus de table rase.
+
+        Args:
+            joueur (Joueur): Le joueur qui subit la table rase.
+        """
         lancers = joueur.table_rase()
-        trajectoires = []
-        for lancer in lancers:
-            print("Trajectoire : ", str(lancer))
-            trajectoires = trajectoires + lancer.trajectoire
+        self.gestionnaire_io.afficher_plusieurs_lancers(lancers,
+                                                        lambda: self.table_rase_c(joueur, lancers))
 
+    def table_rase_c(self, joueur, lancers):
+        """
+        Effectue les lancers dans l'arène, fait le rangement des dés,
+        puis change le joueur et recommence la boucle de jeu.
+
+        Args:
+            joueur (Joueur): le joueur qui subit la table rase
+            lancers (list): La liste des lancers à effectuer.
+
+        Returns:
+
+        """
         self.arene.effectuer_plusieurs_lancers(lancers)
-        print(self.arene.affichage_string(trajectoires))
         self.arene.rangement(joueur)
+        self.changer_joueur()
+        self.selection_action()
 
-    def afficher_arene(self, joueur, lancer=None):
+    def afficher_arene(self, joueur, suite):
         """
         Affiche l'arène, puis soit le début du tour d'un joueur,
         ou le rangement des dés.
 
         Args:
             joueur (Joueur): le joueur dont c'est le tour (None si c'est un rangement de dés)
-            lancer (Lancer): le lancer venant d'être produit, s'il y a lieu.
+            suite (fonction): la suite du programme à exécuter
         """
-        print(self.arene.affichage_string(lancer))
+        """
+        Affiche l'arène.
+
+        Args:
+            joueur (Joueur): le joueur dont c'est le tour
+            suite (fonction): la suite du programme à exécuter
+        """
+        self.gestionnaire_io.afficher_jeu(self.arene,
+                                          lambda: self.afficher_apres_arene(joueur, suite))
+
+    def afficher_apres_arene(self, joueur, suite):
+        """
+        Affiche un message après l'affichage de l'arène.
+        Soit le début du tour d'un joueur, ou le rangement des dés.
+        Args:
+            joueur (Joueur): le joueur dont c'est le tour (None si c'est un rangement de dés)
+            suite (fonction): la suite du programme à exécuter
+        """
         if joueur is None:
-            print("Rangement des dés...")
+            self.gestionnaire_io.afficher_rangement(suite)
         else:
-            print(f"Au tour du {str(joueur)}.")
+            self.gestionnaire_io.afficher_tour(joueur, suite)
 
     def joueur_en_cours(self):
         """
@@ -188,10 +240,12 @@ class Gladeateur:
         Returns:
             Joueur: Le joueur vainqueur (ou None en l'absence de victoire)
         """
-        # VOTRE CODE ICI
-        liste_victoire = []
+        n_joueurs_en_vie, joueur_vainqueur = 0, None
         for joueur in self.liste_joueurs:
             if not joueur.est_elimine():
-                liste_victoire.append(joueur)
-        if len(liste_victoire) == 1:
-            return liste_victoire[0]
+                joueur_vainqueur = joueur
+                n_joueurs_en_vie += 1
+        if n_joueurs_en_vie > 1:
+            return None
+        else:
+            return joueur_vainqueur

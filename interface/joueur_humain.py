@@ -28,7 +28,7 @@ class JoueurHumain(Joueur):
         Args:
             suite_lancer (fonction): Suite du programme après le choix du lancer en entier
         """
-        self.fenetre_jeu.canvas_arene.permettre_clics(
+        self.fenetre_jeu.canvas.permettre_clics(
             lambda coordonnees: True,
             lambda coordonnees: self.choisir_coordonnees_fin(coordonnees, suite_lancer)
         )
@@ -56,9 +56,9 @@ class JoueurHumain(Joueur):
             """
             x2, y2 = coordonnees_fin
             return not (x2 == x1 and y2 == y1) and \
-                   (x2 == x1 or y2 == y1 or y2 - y1 == x2 - x1 or y2 - x1 == y1 - x2)
+                (x2 == x1 or y2 == y1 or y2 - y1 == x2 - x1 or y2 - x1 == y1 - x2)
 
-        self.fenetre_jeu.canvas_arene.permettre_clics(
+        self.fenetre_jeu.canvas.permettre_clics(
             coordonnees_cliquables,
             lambda coordonnees: self.calculer_lancer(coordonnees_debut, coordonnees, suite_lancer)
         )

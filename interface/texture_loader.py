@@ -15,6 +15,7 @@ class GameTextureLoader:
         self.de_4 = resize_image("De4.png", self.width // 32, self.height // 13)
         self.de_5 = resize_image("De5.png", self.width // 32, self.height // 13)
         self.de_6 = resize_image("De6.png", self.width // 32, self.height // 13)
+        self.button_panel = resize_image("Panel.png", int(self.width / 7.2), int(self.height / 15))
 
 
 class MenuTextureLoader:

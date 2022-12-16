@@ -60,7 +60,7 @@ class MainMenu(Menu):
         super().__init__(master)
         self.switch = master
 
-        self.launch_button = self.create_menu_button("Play", lambda: self.switch.switch_menu_canvas("MenuParametres"))
+        self.launch_button = self.create_menu_button("Play", lambda: self.switch.choix_des_parametres("MenuParametres"))
 
         self.options_button = self.create_menu_button("Options", lambda: None)
 

@@ -138,7 +138,7 @@ class MenuParametres(Menu):
         de choisir les paramètres de la partie et de démarrer la partie.
         """
         super().__init__(master)
-        self.switch = master
+        self.master = master
 
         self.label_introduction = Label(self, text="Bienvenue aux GlaDÉateurs!")
 
@@ -158,7 +158,7 @@ class MenuParametres(Menu):
         self.button_frame.grid(row=2, column=0)
 
         self.back_button = self.create_back_button("Back", self.textures)
-        self.back_button.config(command=lambda: self.switch.switch_menu_canvas("MainMenu"))
+        self.back_button.config(command=lambda: self.master.switch_menu_canvas("MainMenu"))
         self.bouton_commencer = self.create_menu_button("Start !", self.commencer)
 
         self.bg_init()
@@ -177,15 +177,12 @@ class MenuParametres(Menu):
         Cette méthode crée la fenêtre principale en fonction des paramètres dans les frames.
         """
         try:
-            self.switch.arene = self.frame_arene.obtenir_arene()
-            self.switch.joueurs = self.frame_joueurs.obtenir_joueurs(self.switch.arene,
+            self.master.arene = self.frame_arene.obtenir_arene()
+            self.master.joueurs = self.frame_joueurs.obtenir_joueurs(self.master.arene,
                                                                      self.frame_arene.obtenir_nombre_des(),
                                                                      self.master)
-            self.grab_release()
-            self.master.focus_set()
             self.destroy()
-            self.switch.switch_menu_canvas("CanvasArene")
-
+            self.master.demarrer()
         except ValueError as e:
             messagebox.showerror("Erreur", str(e))
 
@@ -197,7 +194,7 @@ class MenuParametres(Menu):
             Arene: L'arène créée
             list: La liste de joueurs créés
         """
-        return self.switch.arene, self.switch.joueurs
+        return self.master.arene, self.master.joueurs
 
     def remplissage_auto(self):
         try:

@@ -1,4 +1,4 @@
-dimension:7
+dimension:9
 n_des:10
 dessiner:non
 joueurs:Humain,Ordinateur,Ordinateur
