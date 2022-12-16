@@ -1,4 +1,4 @@
-from interface.switch import Switch
+from interface.menu_switch import Switch
 from interface.music_player import MusicPlayer
 
 root = Switch()

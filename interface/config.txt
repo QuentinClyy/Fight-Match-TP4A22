@@ -1,0 +1,4 @@
+dimension:5
+n_des:10
+dessiner:oui
+joueurs:Humain,Ordinateur,Ordinateur
