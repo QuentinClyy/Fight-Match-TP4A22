@@ -1,5 +1,5 @@
 from interface.texture_loader import MenuTextureLoader
-from tkinter import Frame, Canvas, Button
+from tkinter import Canvas, Button
 import tkinter.font as font
 
 
@@ -32,7 +32,6 @@ class Menu(Canvas):
         created_button.config(image=textures.button_panel, text=text, compound="center")
         button_font = font.Font(family='Roman', size=50)
         created_button['font'] = button_font
-        created_button.pack(padx=10, pady=10)
         return created_button
 
     def create_back_button(self, text, textures):
@@ -45,5 +44,9 @@ class Menu(Canvas):
         created_button.config(image=textures.small_button_panel, text=text, compound="center")
         button_font = font.Font(family='Roman', size=10, weight='bold')
         created_button['font'] = button_font
-        created_button.pack(padx=10, pady=10)
+        return created_button
+
+    def create_player_button(self, text, width, height, textures, command):
+        created_button = self.create_menu_button(text, width/1.2, height, textures, command)
+        created_button.config(image=textures.mid_button_panel, text=text, compound="center")
         return created_button

@@ -12,10 +12,11 @@ class Switch(Tk):
         self.width = self.winfo_width()
         self.height = self.winfo_height()
         self.canvas = None
-        self.switch_canvas(MainMenu)
+        self.switch_menu_canvas(MainMenu)
 
-    def switch_canvas(self, canvas_class):
+    def switch_menu_canvas(self, canvas_class):
         new_canvas = canvas_class(self, self.width, self.height)
+        print(canvas_class)
         if self.canvas is not None:
             self.canvas.destroy()
         self.canvas = new_canvas
