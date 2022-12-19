@@ -21,24 +21,30 @@ class FrameArene(Frame):
         Args:
             master (Frame): Le widget TKinter dans lequel la frame s'intègre.
         """
-        super().__init__(master, borderwidth=1, relief=RIDGE)
+        super().__init__(master, borderwidth=1, relief=RIDGE, background='#d8c0a5',
+                         highlightthickness=2, highlightbackground='#664524')
 
         self.frame_dimension_carre = Frame(self)
-        self.label_dimension_carre = Label(self.frame_dimension_carre, text="Size of one side: ")
-        self.entry_dimension_carre = Entry(self.frame_dimension_carre, width=5)
+        self.label_dimension_carre = Label(self.frame_dimension_carre, text="Size of one side: ",
+                                           background='#d8c0a5')
+        self.entry_dimension_carre = Entry(self.frame_dimension_carre, width=5,
+                                           background='#d8c0a5')
         self.label_dimension_carre.grid(row=0, column=0)
         self.entry_dimension_carre.grid(row=0, column=1)
         self.frame_dimension_carre.grid(row=5, column=0, padx=5, pady=2)
 
         self.frame_nombre_des = Frame(self)
-        self.label_nombre_des = Label(self.frame_nombre_des, text="Number of warriors per player: ")
-        self.entry_nombre_des = Entry(self.frame_nombre_des, width=5)
+        self.label_nombre_des = Label(self.frame_nombre_des, text="Number of warriors per player: ",
+                                      background='#d8c0a5')
+        self.entry_nombre_des = Entry(self.frame_nombre_des, width=5,
+                                      background='#d8c0a5')
         self.label_nombre_des.grid(row=0, column=0)
         self.entry_nombre_des.grid(row=0, column=1)
         self.frame_nombre_des.grid(row=6, column=0, padx=5, pady=2)
 
         self.mode_var = IntVar(value=0)
-        self.mode_checkbutton = Checkbutton(self, text="Display warriors as dice", variable=self.mode_var)
+        self.mode_checkbutton = Checkbutton(self, text="Display warriors as dice", variable=self.mode_var,
+                                            background='#d8c0a5', activebackground='#d8c0a5')
         self.mode_checkbutton.grid(row=4, column=0, padx=5, pady=2)
 
     def obtenir_arene(self):
@@ -82,15 +88,19 @@ class FrameJoueurs(Frame):
         Args:
             master (Frame): Le widget TKinter dans lequel la frame s'intègre.
         """
-        super().__init__(master, borderwidth=1, relief=RIDGE)
-        label_joueurs = Label(self, text="Select the players you want !")
+        super().__init__(master, borderwidth=1, relief=RIDGE, background='#d8c0a5',
+                         highlightthickness=2, highlightbackground='#664524')
+        label_joueurs = Label(self, text="Select the players you want !",
+                              background='#d8c0a5')
         label_joueurs.grid(row=0, column=0, padx=10, pady=10)
         self.boutons_joueur = []
-        frame_boutons = Frame(self)
+        frame_boutons = Frame(self, background='#d8c0a5',
+                              highlightthickness=2, highlightbackground='#664524')
         frame_boutons.grid(row=5, column=0)
         for i in range(5):
             bouton_joueur = Button(frame_boutons, text="Inactive", width=8, font='sans 12',
-                                   command=lambda c=i: self.changer_type_joueur(c))
+                                   command=lambda c=i: self.changer_type_joueur(c),
+                                   background='#d8c0a5', activebackground='#d8c0a5')
             bouton_joueur.grid(row=i // 2, column=i % 2, padx=5, pady=5)
             self.boutons_joueur.append(bouton_joueur)
 
@@ -136,7 +146,8 @@ class FrameRegles(Frame):
         super().__init__(master, borderwidth=1, relief=RIDGE)
         self.texte = []
         self.obtenier_regles()
-        self.label_regles = Label(self)
+        self.label_regles = Label(self, background='#d8c0a5',
+                                  highlightthickness=2, highlightbackground='#664524')
         for ligne in self.texte:
             current_text = self.label_regles.cget("text")
             new_text = current_text + "\n" + ligne
@@ -158,19 +169,21 @@ class MenuParametres(Menu):
         super().__init__(master)
         self.master = master
 
-        self.frame_frame = Frame(self)
+        self.frame_frame = Frame(self, background='#d8c0a5',
+                                 highlightthickness=4, highlightbackground='#664524')
         self.frame_arene = FrameArene(self.frame_frame)
         self.frame_arene.grid(row=0, column=0, padx=10, pady=10)
         self.frame_joueurs = FrameJoueurs(self.frame_frame)
         self.frame_joueurs.grid(row=0, column=1, padx=10, pady=10)
 
-        self.button_frame = Frame(self)
+        self.button_frame = Frame(self, background='#d8c0a5')
         self.bouton_remplissage_auto = Button(self.button_frame, text="Default settings",
-                                              command=self.remplissage_auto)
-        self.bouton_remplissage_auto.grid(row=2, column=0, padx=10, pady=10)
+                                              command=self.remplissage_auto,
+                                              background='#d8c0a5', activebackground='#d8c0a5')
+        self.bouton_remplissage_auto.grid(row=2, column=0)
 
         self.frame_regles = FrameRegles(self)
-        self.create_window(0 + self.master.width // 10,
+        self.create_window(0 + self.master.width // 3.5,
                            self.master.height // 2,
                            anchor="center",
                            window=self.frame_regles)

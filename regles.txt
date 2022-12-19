@@ -1,21 +1,17 @@
-   Welcome to FightMATCH
+Welcome to FightMATCH
 
-     Rules are simple
+Rules are simple
 Get two identical warriors
-     to get a MATCH !
-Throw your warriors in the
-arena to see your warrior's
-value. If you roll a corpse
-(or 1), you lose that warrior.
-If you get a match, you get
-    both warriors back !
+to get a MATCH !
+Throw your warriors in the arena to see
+your warrior's value. If you roll a corpse
+(or 1), you lose that warrior. If you get
+a match, you get both warriors back !
 
-After your first role, you
-can rethrow or let the next
-  player play. BE SMART !
+After your first roll, you can rethrow or
+let the next player play. BE SMART !
 
-If you match the only warrior
-    in the arena, it's an
-         ARENA SWEEP
-The next player has to throw
-   ALL their warriors in !
+If you match the only warrior in the arena,
+it's an ARENA SWEEP !
+The next player has to throw ALL their
+ warriors in !

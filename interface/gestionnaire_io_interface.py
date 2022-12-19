@@ -48,7 +48,7 @@ class GestionnaireIOInterface:
         Args:
             suite (fonction): La fonction à exécuter suite à l'affichage
         """
-        self.frame_description.populer("Table rase! ", self.temps_attente(), suite)
+        self.frame_description.populer("Arena SWEEP! ", self.temps_attente(), suite)
 
     def afficher_fin_tour(self, suite):
         """
@@ -58,7 +58,7 @@ class GestionnaireIOInterface:
             suite (fonction): La fonction à exécuter suite à l'affichage
         """
         self.fenetre_principale.frame_joueur.bouton_terminer_tour["state"] = "disabled"
-        self.frame_description.populer("Fin du tour. ", self.temps_attente(), suite)
+        self.frame_description.populer("End of turn. ", self.temps_attente(), suite)
 
     def afficher_rangement(self, suite):
         """
@@ -67,7 +67,7 @@ class GestionnaireIOInterface:
         Args:
             suite (fonction): La fonction à exécuter suite à l'affichage
         """
-        self.frame_description.populer("Rangement des dés...", self.temps_attente(), suite)
+        self.frame_description.populer("Storing warriors...", self.temps_attente(), suite)
 
     def afficher_tour(self, joueur, suite):
         """
