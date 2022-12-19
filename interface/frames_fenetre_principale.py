@@ -126,5 +126,6 @@ class FrameTempsAttente(Frame):
     def __init__(self, master):
         super().__init__(master)
         #### DÉBUT DÉFI TEMPS ATTENTE ####
-
+        self.scale = Scale(master, from_=50, to=500, label="Vitesse Joueur CPU", orient= "horizontal", width= 20, relief= "ridge", length= 110)
+        self.scale.grid(row=2, column=1, padx=10, pady=10)
         #### FIN DÉFI TEMPS ATTENTE ####
