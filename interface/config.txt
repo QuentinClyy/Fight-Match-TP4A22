@@ -1,4 +1,4 @@
 dimension:7
 n_des:10
 dessiner:non
-joueurs:Humain,Ordinateur,Ordinateur
+joueurs:Player,Bot,Bot

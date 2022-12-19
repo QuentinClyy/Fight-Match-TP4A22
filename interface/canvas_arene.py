@@ -167,6 +167,6 @@ class CanvasArene(Canvas):
             x2, y2 = traj[i + 1]
             self.create_line(self.coordonnees_vers_pixels(y1, x1, True),
                              self.coordonnees_vers_pixels(y2, x2, True),
-                             arrow=LAST)
+                             arrow=LAST, fill='red', width=2)
 
         self.after(temps_attente, suite)

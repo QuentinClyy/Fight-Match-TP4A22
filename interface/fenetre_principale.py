@@ -42,12 +42,14 @@ class FenetrePrincipale(Tk):
         self.switch_menu_canvas("CanvasPrincipal")
 
         self.frame_description = FrameDescription(self)
-        self.canvas.create_window(self.width // 5, self.height // 5,
-                                        anchor="se", window=self.frame_description)
+        self.canvas.create_window(self.width // 2,
+                                  self.height - self.height // 9,
+                                  anchor="center", window=self.frame_description)
 
         self.frame_joueur = FrameJoueurActif(self)
-        self.canvas.create_window(self.width // 5, self.height // 5,
-                                        anchor="se", window=self.frame_joueur)
+        self.canvas.create_window(self.width // 2,
+                                  self.height - self.height // 15,
+                                  anchor="center", window=self.frame_joueur)
 
         self.joueur_index = 0
         self.joueur_actuel = self.joueurs[self.joueur_index]
@@ -56,11 +58,11 @@ class FenetrePrincipale(Tk):
 
         self.frame_tableau_joueurs = FrameTableauJoueurs(self)
         self.frame_temps_attente = FrameTempsAttente(self)
-        self.canvas.create_window((self.width - self.width // 20),
-                                  self.height // 5,
+        self.canvas.create_window((self.width - self.width // 10),
+                                  self.height // 2,
                                   anchor="center", window=self.frame_tableau_joueurs)
         self.canvas.create_window((self.width - self.width // 20),
-                                  self.height // 7,
+                                  self.height // 2 - self.height // 4,
                                   anchor="center", window=self.frame_temps_attente)
 
         self.quit_button = Button(self,
