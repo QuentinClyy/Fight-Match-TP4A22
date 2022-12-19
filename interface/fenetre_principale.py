@@ -61,8 +61,8 @@ class FenetrePrincipale(Tk):
         self.canvas.create_window((self.width - self.width // 10),
                                   self.height // 2,
                                   anchor="center", window=self.frame_tableau_joueurs)
-        self.canvas.create_window((self.width - self.width // 20),
-                                  self.height // 2 - self.height // 4,
+        self.canvas.create_window((self.width - self.width // 10),
+                                  self.height // 2 + self.height // 8,
                                   anchor="center", window=self.frame_temps_attente)
 
         self.quit_button = Button(self,
