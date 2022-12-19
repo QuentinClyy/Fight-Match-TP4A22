@@ -3,8 +3,10 @@ La classe GlaDÉateur
 
 Représente une partie du jeu.
 
-Il est déconseillé de modifier cette classe car cela pourrait facilement
-briser le fonctionnement du jeu (à l'exception des méthodes qui vous sont demandées!).
+Attention: cette classe a été retravaillée pour être utilisable avec une
+interface graphique. Elle s'appuie donc grandement sur le principe des callbacks.
+Ainsi, il est déconseillé de modifier cette classe car cela pourrait facilement
+briser le fonctionnement du jeu.
 """
 
 
@@ -14,16 +16,22 @@ class Gladeateur:
     Attributes:
         liste_joueurs (list): La liste des joueurs.
         arene (Arene): L'arène du jeu.
+        gestionnaire_io (GestionnaireIO): L'instance gérant les entrées/sorties
         joueur_index (int): L'index du joueur actif.
         premier_lancer (bool): False si le joueur actif a fait son premier lancé de dé, False sinon.
     """
+
     def __init__(self, liste_joueurs, arene, gestionnaire_io):
         """
         Constructeur de la classe Gladeateur.
+        Reçoit en paramètre le gestionnaire_io, une classe qui permet au Gladeateur
+        de déléguer toutes les interactions avec l'interface afin qu'on puisse se
+        concentrer sur la logique du jeu ici et non comment c'est affiché.
 
         Args:
             liste_joueurs (list): La liste des joueurs
             arene (Arene): L'arène du jeu
+            gestionnaire_io (GestionnaireIO): L'instance gérant les entrées/sorties
         """
         self.liste_joueurs = liste_joueurs
         self.arene = arene
@@ -73,9 +81,6 @@ class Gladeateur:
 
         Args:
             joueur (Joueur): Le joueur dont c'est le tour
-
-        Returns:
-            bool: True si le tour est terminé, False sinon
         """
         if not joueur.est_elimine():
             self.premier_lancer = False
@@ -174,14 +179,6 @@ class Gladeateur:
 
     def afficher_arene(self, joueur, suite):
         """
-        Affiche l'arène, puis soit le début du tour d'un joueur,
-        ou le rangement des dés.
-
-        Args:
-            joueur (Joueur): le joueur dont c'est le tour (None si c'est un rangement de dés)
-            suite (fonction): la suite du programme à exécuter
-        """
-        """
         Affiche l'arène.
 
         Args:
@@ -213,7 +210,6 @@ class Gladeateur:
         Returns:
             Joueur: Le joueur dont c'est le tour.
         """
-        # VOTRE CODE ICI
         return self.liste_joueurs[self.joueur_index]
 
     def changer_joueur(self):
@@ -224,12 +220,9 @@ class Gladeateur:
          - L'index doit augmenter de plus que 1 lorsqu'il y a des joueurs éliminés
          à sauter (Joueur.est_elimine)
         """
-        # VOTRE CODE ICI
-        self.joueur_index += 1
-        if self.joueur_index % len(self.liste_joueurs) == 0:
-            self.joueur_index = 0
+        self.joueur_index = (self.joueur_index + 1) % len(self.liste_joueurs)
         while self.joueur_en_cours().est_elimine():
-            self.joueur_index += 1
+            self.joueur_index = (self.joueur_index + 1) % len(self.liste_joueurs)
 
     def calculer_victoire(self):
         """

@@ -1,7 +1,8 @@
-from tkinter import Canvas, ALL, LAST, Button
+from tkinter import Canvas, ALL, LAST
 import tkinter.font as font
 from interface.texture_loader import GameTextureLoader
 
+DIMENSION_BASE = 300
 
 class CanvasArene(Canvas):
     def __init__(self, master, arene):
@@ -13,38 +14,19 @@ class CanvasArene(Canvas):
         Args:
             master (Tk): Le widget TKinter dans lequel le canvas s'intègre.
             arene (Arene): L'arène des GlaDéateurs à afficher.
-            width (int): Largeur du canvas
-            height (int): Hauteur du canvas
         """
         self.arene = arene
         self.master = master
-        super().__init__(master, width=self.master.width,
-                         height=self.master.height,
+        self.dimension_canvas = self.master.width // 2.5
+        super().__init__(master, width=self.dimension_canvas + 1,
+                         height=self.dimension_canvas + 1,
                          borderwidth=0, highlightthickness=0)
         self.textures = GameTextureLoader(self.master.width, self.master.height)
 
-        self.dimension_canvas = self.master.height
-        self.dimension_case = int(self.dimension_canvas // (1.5 * self.arene.dimension))
-
-        self.quit_button = Button(self,
-                                  width=int(self.master.width // 7.2),
-                                  height=int(self.master.height // 15),
-                                  borderwidth=0,
-                                  bg='#4d330f', activebackground='#4d330f',
-                                  fg='#ad2513', activeforeground='#63170d',
-                                  command=self.quit)
-        self.quit_button.config(image=self.textures.button_panel, text="Quit", compound="center")
-        button_font = font.Font(family='Roman', size=50)
-        self.quit_button['font'] = button_font
-        self.create_window((self.master.width - self.master.width // 10),
-                           (self.master.height - self.master.height // 20),
-                           anchor="center",
-                           window=self.quit_button)
-
         self.suite_clic = None
         self.coordonnees_cliquables = lambda coordonnees: False
+        self.dimension_case = int(self.dimension_canvas // self.arene.dimension)
         self.bind("<Button-1>", self.selectionner_case)
-
         self.dessiner_canvas(lambda: None)
 
     def pixel_vers_coordonnees(self, x, y):
@@ -58,9 +40,7 @@ class CanvasArene(Canvas):
         Returns:
             tuple: Les coordonnées de la case cliquée.
         """
-        width_addition = int(self.master.width // 3.2)
-        height_addition = int(self.master.height // 5.14)
-        return (x - height_addition) // self.dimension_case, (y - width_addition) // self.dimension_case
+        return x // self.dimension_case, y // self.dimension_case
 
     def coordonnees_vers_pixels(self, x, y, milieu=False):
         """
@@ -75,12 +55,10 @@ class CanvasArene(Canvas):
         Returns:
             tuple: La position en pixels.
         """
-        width_addition = int(self.master.width // 3.2)
-        height_addition = int(self.master.height // 5.14)
         if milieu:
-            return width_addition + (x + 0.5) * self.dimension_case, height_addition + (y + 0.5) * self.dimension_case
+            return (x + 0.5) * self.dimension_case, (y + 0.5) * self.dimension_case
         else:
-            return height_addition + x * self.dimension_case, width_addition + y * self.dimension_case
+            return x * self.dimension_case, y * self.dimension_case
 
     def selectionner_case(self, event):
         """
@@ -96,6 +74,28 @@ class CanvasArene(Canvas):
         coordonnees = self.pixel_vers_coordonnees(x, y)
         if self.suite_clic is not None and self.coordonnees_cliquables(coordonnees):
             self.suite_clic(coordonnees)
+
+    def dessiner_canvas(self, suite):
+        self.delete(ALL)
+        self.create_image(self.dimension_canvas // 2,
+                          self.dimension_canvas // 2,
+                          image=self.textures.canvas_arene_bg,
+                          anchor="center")
+        for i in range(self.arene.dimension ** 2):
+            x, y = i // self.arene.dimension, i % self.arene.dimension
+            haut, gauche = self.coordonnees_vers_pixels(x, y)
+            bas, droite = self.coordonnees_vers_pixels(x + 1, y + 1)
+            if self.coordonnees_cliquables((x, y)):
+                remplissage = self.textures.arene_tile
+            else:
+                remplissage = self.textures.arene_tile_dark
+            self.create_image(droite - (droite - gauche) // 2,
+                              bas - (bas - haut) // 2,
+                              image=remplissage, anchor="center")
+            if (x, y) in self.arene.des:
+                self.dessiner_gladiator((x, y), gauche, haut, droite, bas)
+
+        suite()
 
     def dessiner_de(self, valeur_de, gauche, haut, droite, bas):
         """
@@ -157,25 +157,6 @@ class CanvasArene(Canvas):
         self.coordonnees_cliquables = case_cliquable
         self.suite_clic = suite_clic
         self.dessiner_canvas(lambda: None)
-
-    def dessiner_canvas(self, suite):
-        self.delete(ALL)
-        self.create_image(0, 0, image=self.textures.arene_bg, anchor="nw")
-        for i in range(self.arene.dimension ** 2):
-            x, y = i // self.arene.dimension, i % self.arene.dimension
-            haut, gauche = self.coordonnees_vers_pixels(x, y)
-            bas, droite = self.coordonnees_vers_pixels(x + 1, y + 1)
-            if self.coordonnees_cliquables((x, y)):
-                remplissage = self.textures.arene_tile
-            else:
-                remplissage = self.textures.arene_tile_dark
-            self.create_image(droite - (droite - gauche) // 2,
-                              bas - (bas - haut) // 2,
-                              image=remplissage, anchor="center")
-            if (x, y) in self.arene.des:
-                self.dessiner_gladiator((x, y), gauche, haut, droite, bas)
-
-        suite()
 
     def afficher_lancer(self, lancer, temps_attente, suite):
         self.suite_clic = None

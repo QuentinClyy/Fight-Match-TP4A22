@@ -7,6 +7,7 @@ class GameTextureLoader:
         self.width = width
         self.height = height
         self.arene_bg = resize_image("arena.png", self.width, self.height)
+        self.canvas_arene_bg = resize_image("arena_bg.png", self.width, self.height)
         self.arene_tile = resize_image("tile.png", self.width // 32, self.height // 18)
         self.arene_tile_dark = resize_image("tile_dark.png", self.width // 32, self.height // 18)
         self.de_1 = resize_image("DeX.png", self.width // 32, self.height // 13)

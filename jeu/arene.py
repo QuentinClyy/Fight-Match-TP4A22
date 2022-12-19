@@ -106,12 +106,9 @@ class Arene:
         """
         # VOTRE CODE ICI
         self.retirer_les_x()
-        self.compter_valeurs()
-        self.retirer_correspondances(self.compter_valeurs(), joueur_en_cours)
-        if self.correspondance_existe(self.compter_valeurs()):
-            return True
-        else:
-            return False
+        comptes = self.compter_valeurs()
+        self.retirer_correspondances(comptes, joueur_en_cours)
+        return self.correspondance_existe(comptes)
 
     def retirer_les_x(self):
         """

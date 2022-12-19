@@ -8,7 +8,7 @@ sans avoir à se soucier de comment ce sera affiché.
 
 
 class GestionnaireIOInterface:
-    def __init__(self, fenetre_principale, canvas_arene, frame_description):
+    def __init__(self, fenetre_principale, canvas_principal, frame_description):
         """
         Constructeur de la classe GestionnaireIOInterface
 
@@ -18,7 +18,7 @@ class GestionnaireIOInterface:
             frame_description (FrameDescription): le frame décrivant les événements
         """
         self.fenetre_principale = fenetre_principale
-        self.canvas_arene = canvas_arene
+        self.canvas_arene = canvas_principal.canvas_arene
         self.frame_description = frame_description
 
     def temps_attente(self):

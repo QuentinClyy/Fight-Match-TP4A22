@@ -1,8 +1,8 @@
 import sys
-from tkinter import Tk, messagebox
+from tkinter import Tk, messagebox, Button, font
 from interface.main_menu import MainMenu
 from interface.menu_parametres import MenuParametres
-from interface.canvas_arene import CanvasArene
+from interface.canvas_principal import CanvasPrincipal
 from jeu.gladeateur import Gladeateur
 from interface.joueur_ordinateur import JoueurOrdinateur
 from interface.gestionnaire_io_interface import GestionnaireIOInterface
@@ -14,7 +14,7 @@ class FenetrePrincipale(Tk):
     def __init__(self):
         super().__init__()
         self.geometry("1600x900")
-        # self.attributes('-fullscreen', True)
+        self.attributes('-fullscreen', True)
         self.update()
 
         self.arene = None
@@ -26,11 +26,7 @@ class FenetrePrincipale(Tk):
         self.switch_menu_canvas("MainMenu")
 
     def switch_menu_canvas(self, canvas_class):
-        if canvas_class == "CanvasArene":
-            new_canvas = getattr(sys.modules[__name__], canvas_class)(self, self.arene)
-        else:
-            new_canvas = getattr(sys.modules[__name__], canvas_class)(self)
-
+        new_canvas = getattr(sys.modules[__name__], canvas_class)(self)
         if self.canvas is not None:
             self.canvas.destroy()
         self.canvas = new_canvas
@@ -43,7 +39,7 @@ class FenetrePrincipale(Tk):
         """
         Lance une partie.
         """
-        self.switch_menu_canvas("CanvasArene")
+        self.switch_menu_canvas("CanvasPrincipal")
 
         self.frame_description = FrameDescription(self)
         self.canvas.create_window(self.width // 5, self.height // 5,
@@ -60,11 +56,27 @@ class FenetrePrincipale(Tk):
 
         self.frame_tableau_joueurs = FrameTableauJoueurs(self)
         self.frame_temps_attente = FrameTempsAttente(self)
-        self.canvas.create_window(self.width // 5, self.height // 5,
-                                  anchor="se", window=self.frame_tableau_joueurs)
-        self.canvas.create_window(self.width // 5, self.height // 5,
-                                  anchor="se", window=self.frame_temps_attente)
-        self.canvas.create_rectangle(0, 0, outline='gray', fill='white')
+        self.canvas.create_window((self.width - self.width // 20),
+                                  self.height // 5,
+                                  anchor="center", window=self.frame_tableau_joueurs)
+        self.canvas.create_window((self.width - self.width // 20),
+                                  self.height // 7,
+                                  anchor="center", window=self.frame_temps_attente)
+
+        self.quit_button = Button(self,
+                                  width=int(self.width // 7.2),
+                                  height=int(self.height // 15),
+                                  borderwidth=0,
+                                  bg='#4d330f', activebackground='#4d330f',
+                                  fg='#ad2513', activeforeground='#63170d',
+                                  command=self.quit)
+        self.quit_button.config(image=self.canvas.textures.button_panel, text="Quit", compound="center")
+        button_font = font.Font(family='Roman', size=25)
+        self.quit_button['font'] = button_font
+        self.canvas.create_window((self.width - self.width // 10),
+                                  (self.height - self.height // 20),
+                                  anchor="center",
+                                  window=self.quit_button)
 
         self.gladeateur = Gladeateur(self.joueurs, self.arene, self.gestionnaire_io)
         self.gladeateur.jouer_partie()
@@ -88,7 +100,7 @@ class FenetrePrincipale(Tk):
             suite (fonction): La fonction à exécuter suite au redessinage
         """
 
-        self.canvas.dessiner_canvas(lambda: None)
+        self.canvas.canvas_arene.dessiner_canvas(lambda: None)
         self.frame_description.vider()
 
         if not self.est_joueur_ordi():
@@ -113,5 +125,5 @@ class FenetrePrincipale(Tk):
         Affiche le gagnant de la partie.
         """
         messagebox.showinfo("Fin de la partie", f"Victoire du {str(joueur)}")
-        self.canvas.permettre_clics(lambda _: None, None)
+        self.canvas.canvas_arene.permettre_clics(lambda _: None, None)
         self.frame_joueur.populer(joueur)
