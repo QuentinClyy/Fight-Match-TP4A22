@@ -14,7 +14,7 @@ class FenetrePrincipale(Tk):
     def __init__(self):
         super().__init__()
         self.geometry("1600x900")
-        self.attributes('-fullscreen', True)
+        # self.attributes('-fullscreen', True)
         self.update()
 
         self.arene = None
@@ -64,6 +64,7 @@ class FenetrePrincipale(Tk):
                                   anchor="se", window=self.frame_tableau_joueurs)
         self.canvas.create_window(self.width // 5, self.height // 5,
                                   anchor="se", window=self.frame_temps_attente)
+        self.canvas.create_rectangle(0, 0, outline='gray', fill='white')
 
         self.gladeateur = Gladeateur(self.joueurs, self.arene, self.gestionnaire_io)
         self.gladeateur.jouer_partie()

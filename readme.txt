@@ -4,7 +4,7 @@
 
 Fight match utilise quelques packages pour son bon fontionnement :
 
-- Pygame qui est utilise seulement pour son audiomanager comme music player
+- Pygame qui est utilise SEULEMENT pour son audiomanager comme music player
 - Tkinter qui permet la gestion de l'interface graphique
 - Pillow qui permet la gestion d'images, notamment le resizing
 
@@ -19,7 +19,5 @@ et en s'assurant que le path des scripts est specifies dans les environnement va
     'pip install tk'
 
     'pip install pillow'
-
-Attention ! les dimensions de l'arene doivent etre 5, 7 ou 9 pour que l'arene s'affiche correctement
 
 Enjoy !

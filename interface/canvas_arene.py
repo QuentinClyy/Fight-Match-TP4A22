@@ -16,9 +16,15 @@ class CanvasArene(Canvas):
             width (int): Largeur du canvas
             height (int): Hauteur du canvas
         """
-        super().__init__(master)
         self.arene = arene
+        self.master = master
+        super().__init__(master, width=self.master.width,
+                         height=self.master.height,
+                         borderwidth=0, highlightthickness=0)
         self.textures = GameTextureLoader(self.master.width, self.master.height)
+
+        self.dimension_canvas = self.master.height
+        self.dimension_case = int(self.dimension_canvas // (1.5 * self.arene.dimension))
 
         self.quit_button = Button(self,
                                   width=int(self.master.width // 7.2),
@@ -41,62 +47,40 @@ class CanvasArene(Canvas):
 
         self.dessiner_canvas(lambda: None)
 
-    def placement_arene(self):
+    def pixel_vers_coordonnees(self, x, y):
         """
+        Cette méthode convertit la position d'un clic en coordonnées de l'arène.
+
+        Args:
+            x: La position du clic, en x (de haut en bas)
+            y: La position du clic, en y (de gauche à droite)
 
         Returns:
-            tuple:
-
+            tuple: Les coordonnées de la case cliquée.
         """
-        height_addition = 0
-        width_addition = 0
-        if self.arene.dimension == 5:
-            width_addition = int(self.master.width // 2.56)
-            height_addition = int(self.master.height // 3.09)
-        elif self.arene.dimension == 7:
-            width_addition = int(self.master.width // 2.84)
-            height_addition = int(self.master.height // 4.32)
-        elif self.arene.dimension == 9:
-            width_addition = int(self.master.width // 3.34)
-            height_addition = int(self.master.height // 6.17)
+        width_addition = int(self.master.width // 3.2)
+        height_addition = int(self.master.height // 5.14)
+        return (x - height_addition) // self.dimension_case, (y - width_addition) // self.dimension_case
 
-        return height_addition, width_addition
-
-    def coordonnees_en_pixel(self, x, y):
+    def coordonnees_vers_pixels(self, x, y, milieu=False):
         """
         Cette méthode des coordonnées de l'arène en position en pixels
 
         Args:
             x (int): La coordonnée en x
             y (int): La coordonnée en y
+            milieu (bool): Si True, le centre de la case est retourné.
+                           Si False, le coin haut-gauche est retourné.
 
         Returns:
             tuple: La position en pixels.
         """
-        (width_addition, height_addition) = self.placement_arene()
-
-        x_return = int(width_addition + self.master.width // 21.33 * x)
-        y_return = int(height_addition + self.master.height // 12 * y)
-
-        return x_return, y_return
-
-    def pixel_en_coordonnees(self, x_pixel, y_pixel):
-        """
-        Cette méthode convertit la position d'un clic en coordonnées de l'arène.
-
-        Args:
-            x_pixel: La position du clic, en x (de haut en bas)
-            y_pixel: La position du clic, en y (de gauche à droite)
-
-        Returns:
-            tuple: Les coordonnées de la case cliquée.
-        """
-        (width_addition, height_addition) = self.placement_arene()
-
-        x_return = int((x_pixel - width_addition) // (self.master.width // 21.33))
-        y_return = int((y_pixel - height_addition) // (self.master.height // 12))
-
-        return x_return, y_return
+        width_addition = int(self.master.width // 3.2)
+        height_addition = int(self.master.height // 5.14)
+        if milieu:
+            return width_addition + (x + 0.5) * self.dimension_case, height_addition + (y + 0.5) * self.dimension_case
+        else:
+            return height_addition + x * self.dimension_case, width_addition + y * self.dimension_case
 
     def selectionner_case(self, event):
         """
@@ -109,7 +93,7 @@ class CanvasArene(Canvas):
 
         """
         x, y = event.y, event.x  # nos coordonnées sont transposées par rapport aux pixels
-        coordonnees = self.pixel_en_coordonnees(x, y)
+        coordonnees = self.pixel_vers_coordonnees(x, y)
         if self.suite_clic is not None and self.coordonnees_cliquables(coordonnees):
             self.suite_clic(coordonnees)
 
@@ -157,7 +141,9 @@ class CanvasArene(Canvas):
         if valeur_de in ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"]:
             self.dessiner_de(valeur_de, gauche, haut, droite, bas)
         else:
-            self.create_image(gauche, haut, image=getattr(self.textures, valeur_de), anchor="nw")
+            self.create_image(droite - (droite - gauche) // 2,
+                              bas - (bas - haut) // 2,
+                              image=getattr(self.textures, valeur_de), anchor="center")
 
     def permettre_clics(self, case_cliquable, suite_clic):
         """
@@ -175,16 +161,17 @@ class CanvasArene(Canvas):
     def dessiner_canvas(self, suite):
         self.delete(ALL)
         self.create_image(0, 0, image=self.textures.arene_bg, anchor="nw")
-
         for i in range(self.arene.dimension ** 2):
             x, y = i // self.arene.dimension, i % self.arene.dimension
-            haut, gauche = self.coordonnees_en_pixel(x, y)
-            bas, droite = self.coordonnees_en_pixel(x + 1, y + 1)
+            haut, gauche = self.coordonnees_vers_pixels(x, y)
+            bas, droite = self.coordonnees_vers_pixels(x + 1, y + 1)
             if self.coordonnees_cliquables((x, y)):
                 remplissage = self.textures.arene_tile
             else:
                 remplissage = self.textures.arene_tile_dark
-            self.create_image(gauche, haut, image=remplissage, anchor="nw")
+            self.create_image(droite - (droite - gauche) // 2,
+                              bas - (bas - haut) // 2,
+                              image=remplissage, anchor="center")
             if (x, y) in self.arene.des:
                 self.dessiner_gladiator((x, y), gauche, haut, droite, bas)
 
@@ -197,8 +184,8 @@ class CanvasArene(Canvas):
         for i in range(len(traj) - 1):
             x1, y1 = traj[i]
             x2, y2 = traj[i + 1]
-            self.create_line(*self.coordonnees_en_pixel(y1, x1),
-                             *self.coordonnees_en_pixel(y2, x2),
+            self.create_line(self.coordonnees_vers_pixels(y1, x1, True),
+                             self.coordonnees_vers_pixels(y2, x2, True),
                              arrow=LAST)
 
         self.after(temps_attente, suite)

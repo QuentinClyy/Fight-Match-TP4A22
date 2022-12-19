@@ -207,8 +207,7 @@ class MenuParametres(Menu):
             messagebox.showerror("Erreur", "Il manque un des champs obligatoires")
         except ValueError:
             messagebox.showerror("Erreur", "Un des champs n'a pas le bon format \
-                                \n\nAssurez-vous d'avoir entre 2 et 5 joueurs \
-                                \net une arene de dimension 5, 7 ou 9")
+                                \n\nAssurez-vous d'avoir entre 2 et 5 joueurs")
 
     def obtenir_infos_remplissage(self):
         with open("./interface/config.txt", "r") as fichier_config:
@@ -218,8 +217,6 @@ class MenuParametres(Menu):
 
     def ecrire_selon_cle(self, cle, valeur):
         if cle == 'dimension':
-            if valeur not in ["5", "7", "9"]:
-                raise ValueError
             self.frame_arene.entry_dimension_carre.delete(0, END)
             self.frame_arene.entry_dimension_carre.insert(0, valeur)
         elif cle == 'n_des':
