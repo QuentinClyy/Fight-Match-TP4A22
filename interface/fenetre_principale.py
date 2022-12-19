@@ -13,7 +13,6 @@ from interface.frames_fenetre_principale import FrameDescription, FrameJoueurAct
 class FenetrePrincipale(Tk):
     def __init__(self):
         super().__init__()
-        self.geometry("1600x900")
         self.attributes('-fullscreen', True)
         self.update()
 
