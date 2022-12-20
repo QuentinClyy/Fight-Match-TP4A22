@@ -17,7 +17,7 @@ class JoueurOrdinateur(Joueur):
         """
         Détermine si le joueur souhaite continuer son tour.
         """
-        if len(self.des) < 3:
+        if len(self.des) <= 3:
             return False
         decision = randint(1, 4)
         if decision in range(3):
