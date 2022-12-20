@@ -38,7 +38,6 @@ class JoueurOrdinateur(Joueur):
             return choice(['S', 'SE', 'E', 'NE'])
         else:
             return choice(['N', 'NO', 'O', 'SO'])
-        # return self.piger_angle()
 
     def choisir_puissance(self):
         """
