@@ -131,7 +131,8 @@ class FrameTempsAttente(Frame):
                            label="Time of execution",
                            orient="horizontal", width=20,
                            relief="ridge", length=110,
-                           background='#d8c0a5', activebackground='#d8c0a5')
+                           background='#d8c0a5', activebackground='#d8c0a5',
+                           troughcolor='#664524')
         self.scale.set(250)
         self.scale.grid()
         self.master.gestionnaire_io.temps_attente = self.get_temps

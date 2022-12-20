@@ -10,6 +10,7 @@ class FrameOptions(Frame):
                                   orient="horizontal", width=20,
                                   relief="ridge", length=300,
                                   background='#d8c0a5', activebackground='#d8c0a5',
+                                  troughcolor='#664524',
                                   command=self.master.change_volume)
         self.scale_volume.set(50)
         self.scale_volume.grid(row=0)
@@ -22,6 +23,7 @@ class FrameOptions(Frame):
                                    orient="horizontal", width=20,
                                    relief="ridge", length=300,
                                    background='#d8c0a5', activebackground='#d8c0a5',
+                                   troughcolor='#664524',
                                    command=self.populer)
         self.scale_useless.grid(row=2)
 
