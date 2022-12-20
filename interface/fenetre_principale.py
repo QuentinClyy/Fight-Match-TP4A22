@@ -71,7 +71,7 @@ class FenetrePrincipale(Tk):
                                   borderwidth=0,
                                   bg='#4d330f', activebackground='#4d330f',
                                   fg='#ad2513', activeforeground='#63170d',
-                                  command=self.quit)
+                                  command=lambda: self.switch_menu_canvas("MainMenu"))
         self.quit_button.config(image=self.canvas.textures.button_panel, text="Quit", compound="center")
         button_font = font.Font(family='Roman', size=25)
         self.quit_button['font'] = button_font
