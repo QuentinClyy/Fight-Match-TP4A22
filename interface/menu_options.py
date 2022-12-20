@@ -1,10 +1,28 @@
+from tkinter import Frame, Scale, Label
 from interface.menu import Menu
+
+
+class FrameOptions(Frame):
+    def __init__(self, master):
+        super().__init__(master, background='#d8c0a5', highlightthickness=4, highlightbackground='#664524')
+
+        self.scale_volume = Scale(self, from_=0, to=50, label="Music volume",
+                                  orient="horizontal", width=20,
+                                  relief="ridge", length=300,
+                                  background='#d8c0a5', activebackground='#d8c0a5',
+                                  command=self.master.change_volume)
+        self.scale_volume.set(50)
+        self.scale_volume.grid(row=0)
+
+        self.label_credit = Label(self, text="Credits : MASK OFF (Bardcore Version) - Beedle The Bardcore",
+                                  background='#d8c0a5')
+        self.label_credit.grid(row=1)
 
 
 class MenuOptions(Menu):
     def __init__(self, master):
         super().__init__(master)
-        self.frame_options = FrameOptions(master)
+        self.frame_options = FrameOptions(self)
 
         self.back_button = self.create_back_button("Back", self.textures)
         self.back_button.config(command=lambda: self.master.switch_menu_canvas("MainMenu"))
@@ -20,3 +38,6 @@ class MenuOptions(Menu):
                            (self.master.height - self.master.height // 21.6),
                            anchor="se",
                            window=self.back_button)
+
+    def change_volume(self, volume):
+        self.master.music_player.player.set_volume(float(volume) / float(100))

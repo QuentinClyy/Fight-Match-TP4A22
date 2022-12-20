@@ -3,6 +3,8 @@ from tkinter import Tk, messagebox, Button, font
 from interface.main_menu import MainMenu
 from interface.menu_parametres import MenuParametres
 from interface.canvas_principal import CanvasPrincipal
+from interface.menu_options import MenuOptions
+from interface.music_player import MusicPlayer
 from jeu.gladeateur import Gladeateur
 from interface.joueur_ordinateur import JoueurOrdinateur
 from interface.gestionnaire_io_interface import GestionnaireIOInterface
@@ -15,6 +17,8 @@ class FenetrePrincipale(Tk):
         super().__init__()
         self.attributes('-fullscreen', True)
         self.update()
+
+        self.music_player = MusicPlayer()
 
         self.arene = None
         self.joueurs = None
@@ -30,9 +34,6 @@ class FenetrePrincipale(Tk):
             self.canvas.destroy()
         self.canvas = new_canvas
         self.canvas.pack(fill="both", expand=True)
-
-    def choix_des_parametres(self, canvas_class):
-        self.switch_menu_canvas(canvas_class)
 
     def demarrer(self):
         """

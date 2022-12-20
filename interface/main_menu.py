@@ -58,11 +58,10 @@ class MainMenu(Menu):
 
     def __init__(self, master):
         super().__init__(master)
-        self.switch = master
 
-        self.launch_button = self.create_menu_button("Play", lambda: self.switch.choix_des_parametres("MenuParametres"))
+        self.launch_button = self.create_menu_button("Play", lambda: self.master.switch_menu_canvas("MenuParametres"))
 
-        self.options_button = self.create_menu_button("Options", lambda: None)
+        self.options_button = self.create_menu_button("Options", lambda: self.master.switch_menu_canvas("MenuOptions"))
 
         self.quit_button = self.create_menu_button("Quit", master.quit)
 
