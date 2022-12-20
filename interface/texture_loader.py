@@ -18,6 +18,21 @@ class GameTextureLoader:
         self.de_6 = resize_image("De6.png", self.width // 32, self.height // 13)
         self.button_panel = resize_image("Panel.png", int(self.width / 7.2), int(self.height / 15))
 
+    def resize_arena_objects(self, dimension_arene):
+        width_factor = dimension_arene * 4.57
+        height_factor_de = dimension_arene * 1.88
+        height_factor_tile = dimension_arene * 2.57
+
+        self.arene_tile = resize_image("tile.png", self.width // width_factor,
+                                       self.height // height_factor_tile)
+        self.arene_tile_dark = resize_image("tile_dark.png", self.width // width_factor,
+                                            self.height // height_factor_tile)
+        self.de_1 = resize_image("DeX.png", self.width // width_factor, self.height // height_factor_de)
+        self.de_2 = resize_image("De2.png", self.width // width_factor, self.height // height_factor_de)
+        self.de_3 = resize_image("De3.png", self.width // width_factor, self.height // height_factor_de)
+        self.de_4 = resize_image("De4.png", self.width // width_factor, self.height // height_factor_de)
+        self.de_5 = resize_image("De5.png", self.width // width_factor, self.height // height_factor_de)
+        self.de_6 = resize_image("De6.png", self.width // width_factor, self.height // height_factor_de)
 
 class MenuTextureLoader:
 

@@ -21,6 +21,7 @@ class CanvasArene(Canvas):
                          height=self.dimension_canvas + 1,
                          borderwidth=0, highlightthickness=0)
         self.textures = GameTextureLoader(self.master.width, self.master.height)
+        self.textures.resize_arena_objects(self.arene.dimension)
 
         self.suite_clic = None
         self.coordonnees_cliquables = lambda coordonnees: False
