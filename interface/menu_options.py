@@ -18,6 +18,25 @@ class FrameOptions(Frame):
                                   background='#d8c0a5')
         self.label_credit.grid(row=1)
 
+        self.scale_useless = Scale(self, from_=0, to=9000, label="Useless Setting",
+                                   orient="horizontal", width=20,
+                                   relief="ridge", length=300,
+                                   background='#d8c0a5', activebackground='#d8c0a5',
+                                   command=self.populer)
+        self.scale_useless.grid(row=2)
+
+        self.label_useless = Label(self, text="You can play with the slider, it won't change anything \n"
+                                              "I swear !",
+                                   background='#d8c0a5')
+        self.label_over_9000 = Label(self, text='',
+                                     background='#d8c0a5')
+        self.label_useless.grid(row=3)
+        self.label_over_9000.grid(row=4)
+
+    def populer(self, valeur):
+        self.label_over_9000.config(text="It can't go over 9000, Vegeta, just stop it")
+
+
 
 class MenuOptions(Menu):
     def __init__(self, master):
