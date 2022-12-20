@@ -51,7 +51,7 @@ class Joueur:
         """
         raise NotImplementedError("Les classes enfant doivent implémenter cette méthode. ")
 
-    def choisir_angle(self):
+    def choisir_angle(self, coordonnees):
         """
         Détermine comment le joueur choisit l'angle de son lancer.
         Doit être implémenté par les classes enfant de Joueur.
@@ -92,7 +92,7 @@ class Joueur:
                 Prend en argument le lancer créé et le joueur.
         """
         coordonnees = self.choisir_coordonnees()
-        angle = self.choisir_angle()
+        angle = self.choisir_angle(coordonnees)
         puissance = self.choisir_puissance()
         lancer = self.creer_lancer(coordonnees, angle, puissance)
         suite(lancer, self)

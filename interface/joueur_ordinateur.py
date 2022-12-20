@@ -4,13 +4,14 @@ La classe JoueurOrdinateur
 Hérite de Joueur et contient une "intelligence artificielle" extrêmement rudimentaire.
 """
 
-from random import randint
+from random import randint, choice
 from jeu.joueur import Joueur
 
 
 class JoueurOrdinateur(Joueur):
     def __init__(self, numero_joueur, des_initiaux, arene):
         super().__init__(numero_joueur, des_initiaux, arene)
+        self.arene = arene
 
     def decision_continuer(self):
         """
@@ -25,20 +26,22 @@ class JoueurOrdinateur(Joueur):
     def choisir_coordonnees(self):
         """
         Détermine comment le joueur choisit les coordonnées de son lancer.
-        Doit être implémenté par les classes enfant de Joueur.
         """
         return self.piger_coordonnees()
 
-    def choisir_angle(self):
+    def choisir_angle(self, coordonnees):
         """
         Détermine comment le joueur choisit l'angle de son lancer.
-        Doit être implémenté par les classes enfant de Joueur.
         """
-        return self.piger_angle()
+        x, y = coordonnees
+        if x in range(int(self.arene.dimension // 2)):
+            return choice(['S', 'SE', 'E', 'NE'])
+        else:
+            return choice(['N', 'NO', 'O', 'SO'])
+        # return self.piger_angle()
 
     def choisir_puissance(self):
         """
         Détermine comment le joueur choisit la puissance de son lancer.
-        Doit être implémenté par les classes enfant de Joueur.
         """
         return self.piger_puissance()
