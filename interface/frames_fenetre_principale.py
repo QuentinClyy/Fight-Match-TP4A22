@@ -2,7 +2,7 @@
 Module contenant des frames utilitaires présents dans la fenêtre principale.
 """
 
-from tkinter import Frame, Label, Button, Scale, VERTICAL, IntVar, Canvas
+from tkinter import Frame, Label, Button, Scale, VERTICAL, IntVar
 
 from interface.joueur_ordinateur import JoueurOrdinateur
 
@@ -127,7 +127,6 @@ class FrameTableauJoueurs(Frame):
 class FrameTempsAttente(Frame):
     def __init__(self, master):
         super().__init__(master, background='#d8c0a5', highlightthickness=2, highlightbackground='#664524')
-        #### DÉBUT DÉFI TEMPS ATTENTE ####
         self.scale = Scale(self, from_=50, to=500,
                            label="Bot player speed",
                            orient="horizontal", width=20,
@@ -139,4 +138,3 @@ class FrameTempsAttente(Frame):
 
     def get_temps(self):
         return int(self.scale.get())
-        #### FIN DÉFI TEMPS ATTENTE ####
