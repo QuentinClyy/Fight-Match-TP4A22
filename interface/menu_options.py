@@ -39,7 +39,6 @@ class FrameOptions(Frame):
         # See ? it doesn't do anything
 
 
-
 class MenuOptions(Menu):
     def __init__(self, master):
         super().__init__(master)
