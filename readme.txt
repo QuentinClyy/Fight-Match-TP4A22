@@ -21,6 +21,7 @@ in your ANACONDA command prompt. (These commands can also be run directly in you
     'pip install pillow'
 
 To play, you only need to run the root.py file
+It is recommended to play with a resolution of 1920x1080 eventhough every resolution is supported
 
 Enjoy !
 
@@ -49,5 +50,6 @@ et en s'assurant que le path des scripts est specifies dans les environnement va
     'pip install pillow'
 
 Pour jouer, il suffit de run le fichier root.py
+Il est recommande de jouer avec une resolution de 1920x1080 meme si toute resolution devrait fonctionner
 
 En joi !

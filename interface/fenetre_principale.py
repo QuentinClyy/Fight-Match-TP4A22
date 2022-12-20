@@ -1,5 +1,5 @@
 import sys
-from tkinter import Tk, messagebox, Button, font
+from tkinter import Tk, messagebox, Button, font, Canvas
 from interface.main_menu import MainMenu
 from interface.menu_parametres import MenuParametres
 from interface.canvas_principal import CanvasPrincipal
@@ -56,14 +56,22 @@ class FenetrePrincipale(Tk):
 
         self.gestionnaire_io = GestionnaireIOInterface(self, self.canvas, self.frame_description)
 
+        self.canvas_tableau = Canvas(self, width=int(self.width // 10),
+                                     height=int(self.width // 8),
+                                     bg='#4d330f')
+        self.canvas_tableau.create_image(0, 0, image=self.canvas.textures.tableau_panel,
+                                         anchor="nw")
         self.frame_tableau_joueurs = FrameTableauJoueurs(self)
         self.frame_temps_attente = FrameTempsAttente(self)
+        self.canvas_tableau.create_window(int(self.width // 20.21),
+                                          int(self.height // 10.8),
+                                          anchor="center", window=self.frame_tableau_joueurs)
+        self.canvas_tableau.create_window(int(self.width // 20.21),
+                                          int(self.height // 5.4),
+                                          anchor="center", window=self.frame_temps_attente)
         self.canvas.create_window((self.width - self.width // 5),
                                   self.height // 2,
-                                  anchor="center", window=self.frame_tableau_joueurs)
-        self.canvas.create_window((self.width - self.width // 5),
-                                  self.height // 2 + self.height // 8,
-                                  anchor="center", window=self.frame_temps_attente)
+                                  anchor="center", window=self.canvas_tableau)
 
         self.quit_button = Button(self,
                                   width=int(self.width // 7.2),

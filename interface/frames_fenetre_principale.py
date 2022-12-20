@@ -98,7 +98,7 @@ class FrameJoueurActif(Frame):
 
 class FrameTableauJoueurs(Frame):
     def __init__(self, master):
-        super().__init__(master, background='#d8c0a5', highlightthickness=2, highlightbackground='#664524')
+        super().__init__(master, background='#d8c0a5')
 
         self.joueurs = self.master.joueurs
         self.couleurs = self.master.frame_joueur.couleurs
@@ -126,9 +126,9 @@ class FrameTableauJoueurs(Frame):
 
 class FrameTempsAttente(Frame):
     def __init__(self, master):
-        super().__init__(master, background='#d8c0a5', highlightthickness=2, highlightbackground='#664524')
-        self.scale = Scale(self, from_=50, to=500,
-                           label="Time of execution",
+        super().__init__(master, background='#d8c0a5')
+        self.scale = Scale(self, from_=10, to=500,
+                           label="Execution time",
                            orient="horizontal", width=20,
                            relief="ridge", length=110,
                            background='#d8c0a5', activebackground='#d8c0a5',
