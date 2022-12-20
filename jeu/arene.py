@@ -1,4 +1,3 @@
-from tkinter import *
 from jeu.de import De
 
 

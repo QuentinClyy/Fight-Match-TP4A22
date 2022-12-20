@@ -3,7 +3,7 @@ Module contenant la classe FenetreIntroduction et ses classes
 utilitaires FrameArene et FrameJoueurs.
 """
 
-from tkinter import IntVar, Button, Label, Entry, Frame, messagebox, RIDGE, Tk, \
+from tkinter import IntVar, Button, Label, Entry, Frame, messagebox, RIDGE, \
     Checkbutton, END
 from interface.menu import Menu
 from jeu.arene import Arene

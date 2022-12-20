@@ -37,4 +37,3 @@ def resize_image(img_name, width, height):
     load_img = Image.open(f"./interface/Images/{img_name}")
     res_img = load_img.resize((int(width), int(height)), resample=Image.NEAREST)
     return ImageTk.PhotoImage(res_img)
-

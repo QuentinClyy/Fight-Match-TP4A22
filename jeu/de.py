@@ -5,7 +5,6 @@ Représente un dé à 6 faces.
 """
 
 from random import randint
-import interface.texture_loader as tl
 
 
 class De:

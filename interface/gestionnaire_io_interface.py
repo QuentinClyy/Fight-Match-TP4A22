@@ -29,7 +29,7 @@ class GestionnaireIOInterface:
             int: Le temps entre deux actions, en millisecondes.
 
         """
-        return 750
+        return 250
 
     def afficher_jeu(self, arene, suite):
         """

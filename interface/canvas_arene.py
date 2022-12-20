@@ -2,7 +2,6 @@ from tkinter import Canvas, ALL, LAST
 import tkinter.font as font
 from interface.texture_loader import GameTextureLoader
 
-DIMENSION_BASE = 300
 
 class CanvasArene(Canvas):
     def __init__(self, master, arene):
