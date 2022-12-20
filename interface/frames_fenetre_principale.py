@@ -118,7 +118,7 @@ class FrameTableauJoueurs(Frame):
         for joueur in self.joueurs:
             nombre_des = len(joueur.des)
             if nombre_des == 0:
-                nombre_des = "éliminé"
+                nombre_des = "Eliminated"
             label = self.liste_label[i]
             label.config(text=f"Player {joueur.numero_joueur}: {nombre_des}")
             i += 1
