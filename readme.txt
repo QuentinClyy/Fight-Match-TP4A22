@@ -2,7 +2,7 @@
 # Welcome to Fight Match #
 ##########################
 
-Fight match uses a few packages for it work properly :
+Fight match uses a few packages for it to work properly :
 
 - Pygame which is used ONLY for its audiomanager as a music player
 - Tkinter which allows gestion of the graphical interface
