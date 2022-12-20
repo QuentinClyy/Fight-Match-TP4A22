@@ -133,5 +133,10 @@ class FrameTempsAttente(Frame):
                            orient="horizontal", width=20,
                            relief="ridge", length=110,
                            background='#d8c0a5')
+        self.scale.set(250)
         self.scale.grid()
+        self.master.gestionnaire_io.temps_attente = self.get_temps
+
+    def get_temps(self):
+        return int(self.scale.get())
         #### FIN DÉFI TEMPS ATTENTE ####
