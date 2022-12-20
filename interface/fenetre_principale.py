@@ -15,8 +15,7 @@ from interface.frames_fenetre_principale import FrameDescription, FrameJoueurAct
 class FenetrePrincipale(Tk):
     def __init__(self):
         super().__init__()
-        self.geometry("1600x900")
-        # self.attributes('-fullscreen', True)
+        self.attributes('-fullscreen', True)
         self.update()
 
         self.music_player = MusicPlayer()
@@ -130,4 +129,5 @@ class FenetrePrincipale(Tk):
         messagebox.showinfo("Fin de la partie", f"Victoire du {str(joueur)}")
         self.canvas.canvas_arene.permettre_clics(lambda _: None, None)
         self.frame_tableau_joueurs.mise_a_jour()
+        self.quit_button.config(command=lambda: self.switch_menu_canvas("MainMenu"))
         self.frame_joueur.populer(joueur)
