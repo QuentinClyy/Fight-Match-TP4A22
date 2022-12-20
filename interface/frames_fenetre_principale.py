@@ -128,7 +128,7 @@ class FrameTempsAttente(Frame):
     def __init__(self, master):
         super().__init__(master, background='#d8c0a5', highlightthickness=2, highlightbackground='#664524')
         self.scale = Scale(self, from_=50, to=500,
-                           label="Bot player speed",
+                           label="Time of execution",
                            orient="horizontal", width=20,
                            relief="ridge", length=110,
                            background='#d8c0a5', activebackground='#d8c0a5')

@@ -14,5 +14,3 @@ class MusicPlayer:
 
     def change_volume(self):
         return 0.5
-
-
