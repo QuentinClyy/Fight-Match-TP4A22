@@ -129,5 +129,6 @@ class FenetrePrincipale(Tk):
         messagebox.showinfo("Fin de la partie", f"Victoire du {str(joueur)}")
         self.canvas.canvas_arene.permettre_clics(lambda _: None, None)
         self.frame_tableau_joueurs.mise_a_jour()
-        self.quit_button.config(command=lambda: self.switch_menu_canvas("MainMenu"))
+        self.quit_button.config(text="Back to menu",
+                                command=lambda: self.switch_menu_canvas("MainMenu"))
         self.frame_joueur.populer(joueur)
