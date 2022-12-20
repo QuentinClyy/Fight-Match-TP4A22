@@ -34,7 +34,9 @@ class FrameOptions(Frame):
         self.label_over_9000.grid(row=4)
 
     def populer(self, valeur):
-        self.label_over_9000.config(text="It can't go over 9000, Vegeta, just stop it")
+        if int(valeur) in range(8500, 9000):
+            self.label_over_9000.config(text="It can't go over 9000, Vegeta, just stop it")
+        # See ? it doesn't do anything
 
 
 
