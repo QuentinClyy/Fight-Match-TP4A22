@@ -34,10 +34,16 @@ class JoueurOrdinateur(Joueur):
         Détermine comment le joueur choisit l'angle de son lancer.
         """
         x, y = coordonnees
-        if x in range(int(self.arene.dimension // 2)):
-            return choice(['S', 'SE', 'E', 'NE'])
+        if x in range(int(self.arene.dimension // 2 + 1)):
+            if y in range(int(self.arene.dimension // 2 + 1)):
+                return choice(['S', 'SE', 'E'])
+            else:
+                return choice(['N', 'NE', 'E'])
         else:
-            return choice(['N', 'NO', 'O', 'SO'])
+            if y in range(int(self.arene.dimension // 2 + 1)):
+                return choice(['SO', 'O', 'S'])
+            else:
+                return choice(['N', 'NO', 'O'])
 
     def choisir_puissance(self):
         """
