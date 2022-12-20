@@ -1,5 +1,4 @@
 from tkinter import Canvas, ALL, LAST
-import tkinter.font as font
 from interface.texture_loader import GameTextureLoader
 
 
