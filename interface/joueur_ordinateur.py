@@ -17,7 +17,7 @@ class JoueurOrdinateur(Joueur):
         """
         Détermine si le joueur souhaite continuer son tour.
         """
-        if len(self.des) <= 3:
+        if len(self.des) <= 3 and len(self.arene.des) <= 2:
             return False
         decision = randint(1, 4)
         if decision in range(3):
@@ -40,10 +40,10 @@ class JoueurOrdinateur(Joueur):
             if y in range(int(self.arene.dimension // 2 + 1)):
                 return choice(['S', 'SE', 'E'])
             else:
-                return choice(['N', 'NE', 'E'])
+                return choice(['S', 'SO', 'O'])
         else:
             if y in range(int(self.arene.dimension // 2 + 1)):
-                return choice(['SO', 'O', 'S'])
+                return choice(['N', 'NE', 'E'])
             else:
                 return choice(['N', 'NO', 'O'])
 
