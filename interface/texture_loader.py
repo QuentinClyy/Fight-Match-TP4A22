@@ -34,6 +34,7 @@ class GameTextureLoader:
         self.de_5 = resize_image("De5.png", self.width // width_factor, self.height // height_factor_de)
         self.de_6 = resize_image("De6.png", self.width // width_factor, self.height // height_factor_de)
 
+
 class MenuTextureLoader:
 
     def __init__(self, width, height):
@@ -43,9 +44,14 @@ class MenuTextureLoader:
         self.menu_left_char = resize_image("leftWarrior.png", self.width, self.height)
         self.menu_right_char = resize_image("rightWarrior.png", self.width, self.height)
         self.menu_title = resize_image("title.png", self.width, self.height)
-        self.button_panel = resize_image("Panel.png", int(self.width/2.367), int(self.height/5))
-        self.small_button_panel = resize_image("smallButton.png", self.width/38.4, self.height/21.6)
-        self.mid_button_panel = resize_image("Panel.png", int(self.width/(2*2.367)), int(self.height/5))
+        self.menu_panel = resize_image("menu_panel.png", self.width // 3.27,
+                                       self.height // 2.73)
+        self.button_panel = resize_image("Panel.png", int(self.width // 2.367),
+                                         int(self.height // 5))
+        self.small_button_panel = resize_image("smallButton.png", self.width // 38.4,
+                                               self.height // 21.6)
+        self.mid_button_panel = resize_image("Panel.png", int(self.width // (2 * 2.367)),
+                                             int(self.height // 5))
 
 
 def resize_image(img_name, width, height):

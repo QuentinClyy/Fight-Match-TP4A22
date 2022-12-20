@@ -4,7 +4,7 @@ from interface.menu import Menu
 
 class FrameOptions(Frame):
     def __init__(self, master):
-        super().__init__(master, background='#d8c0a5', highlightthickness=4, highlightbackground='#664524')
+        super().__init__(master, background='#d8c0a5')
 
         self.scale_volume = Scale(self, from_=0, to=50, label="Music volume",
                                   orient="horizontal", width=20,
@@ -50,6 +50,11 @@ class MenuOptions(Menu):
         self.back_button.config(command=lambda: self.master.switch_menu_canvas("MainMenu"))
 
         self.bg_init()
+
+        self.create_image(self.master.width // 2,
+                          self.master.height // 2,
+                          image=self.textures.menu_panel,
+                          anchor="center")
 
         self.create_window(self.master.width // 2,
                            self.master.height // 2,

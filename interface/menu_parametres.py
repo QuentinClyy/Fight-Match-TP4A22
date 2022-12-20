@@ -21,8 +21,7 @@ class FrameArene(Frame):
         Args:
             master (Frame): Le widget TKinter dans lequel la frame s'intègre.
         """
-        super().__init__(master, borderwidth=1, relief=RIDGE, background='#d8c0a5',
-                         highlightthickness=2, highlightbackground='#664524')
+        super().__init__(master, borderwidth=1, relief=RIDGE, background='#d8c0a5')
 
         self.frame_dimension_carre = Frame(self)
         self.label_dimension_carre = Label(self.frame_dimension_carre, text="Size of one side: ",
@@ -88,14 +87,12 @@ class FrameJoueurs(Frame):
         Args:
             master (Frame): Le widget TKinter dans lequel la frame s'intègre.
         """
-        super().__init__(master, borderwidth=1, relief=RIDGE, background='#d8c0a5',
-                         highlightthickness=2, highlightbackground='#664524')
+        super().__init__(master, borderwidth=1, relief=RIDGE, background='#d8c0a5')
         label_joueurs = Label(self, text="Select the players you want !",
                               background='#d8c0a5')
         label_joueurs.grid(row=0, column=0, padx=10, pady=10)
         self.boutons_joueur = []
-        frame_boutons = Frame(self, background='#d8c0a5',
-                              highlightthickness=2, highlightbackground='#664524')
+        frame_boutons = Frame(self, background='#d8c0a5')
         frame_boutons.grid(row=5, column=0)
         for i in range(5):
             bouton_joueur = Button(frame_boutons, text="Inactive", width=8, font='sans 12',
@@ -169,8 +166,7 @@ class MenuParametres(Menu):
         super().__init__(master)
         self.master = master
 
-        self.frame_frame = Frame(self, background='#d8c0a5',
-                                 highlightthickness=4, highlightbackground='#664524')
+        self.frame_frame = Frame(self, background='#d8c0a5')
         self.frame_arene = FrameArene(self.frame_frame)
         self.frame_arene.grid(row=0, column=0, padx=10, pady=10)
         self.frame_joueurs = FrameJoueurs(self.frame_frame)
@@ -183,8 +179,8 @@ class MenuParametres(Menu):
         self.bouton_remplissage_auto.grid(row=2, column=0)
 
         self.frame_regles = FrameRegles(self)
-        self.create_window(0 + self.master.width // 3.5,
-                           self.master.height // 2,
+        self.create_window(0 + self.master.width // 6,
+                           self.master.height // 1.7,
                            anchor="center",
                            window=self.frame_regles)
 
@@ -193,6 +189,11 @@ class MenuParametres(Menu):
         self.bouton_commencer = self.create_menu_button("Start !", self.commencer)
 
         self.bg_init()
+
+        self.create_image(self.master.width // 2,
+                          self.master.height // 2,
+                          image=self.textures.menu_panel,
+                          anchor="center")
 
         self.create_window(self.master.width // 2,
                            self.master.height // 2 + self.master.height // 10,
